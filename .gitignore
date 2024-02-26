@@ -1,0 +1,7 @@
+README_ENCS.txt
+node_modules
+*/build
+*/dist
+*/types
+.vscode
+**/.env

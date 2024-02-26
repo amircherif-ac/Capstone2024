@@ -1,0 +1,27 @@
+FROM node:18.9.1-alpine3.15
+
+WORKDIR /build
+
+# Copy over all the source files
+COPY ./back-end ./back-end
+COPY ./models ./models
+
+WORKDIR /build/models
+RUN npm i
+RUN npm run build
+
+WORKDIR /build/back-end
+
+ENV WEBSOCKET_SERVER_HOST='http://websocket-server:5199'
+ENV JWT_SECRET='TopSecretDBTokenSignature'
+ENV SOCKET_SECRET='an_important_secret'
+ENV PRIVATE_KEY_MESSAGING='ce54bf79-31e1-4b87-a620-a2ec319e8541'
+
+# Set network timeout since the VM has slow download speeds
+RUN npm config set timeout 300000
+
+# Install the dependencies
+RUN npm i --no-audit --no-fund
+
+# Start running the login service
+ENTRYPOINT [ "node", "./src/server.js" ]

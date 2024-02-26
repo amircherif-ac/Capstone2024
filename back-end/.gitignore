@@ -1,0 +1,7 @@
+# Build folder for backend should be ignored
+dist/
+
+# Node modules for backend should be ignored
+node_modules/
+
+*.env

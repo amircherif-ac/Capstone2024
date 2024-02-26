@@ -1,0 +1,20 @@
+FROM node:18.9.1-alpine3.15
+
+WORKDIR /build
+
+COPY ./websocket-server ./websocket-server
+COPY ./models ./models
+
+WORKDIR /build/models
+RUN npm i
+RUN npm run build
+
+WORKDIR /build/websocket-server
+
+ENV JWT_DB_SECRET='TopSecretDBTokenSignature'
+ENV SOCKET_SECRET='an_important_secret'
+
+RUN npm i
+RUN npm run build
+
+ENTRYPOINT [ "node", "./build/index.js" ]

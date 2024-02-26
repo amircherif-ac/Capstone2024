@@ -1,0 +1,9 @@
+{
+  "dependencies": {
+    "date-fns": "^2.29.3",
+    "react-chat-engine": "^1.11.28",
+    "react-chat-engine-advanced": "^0.1.28",
+    "react-speech-recognition": "^3.10.0",
+    "rm": "^0.1.8"
+  }
+}

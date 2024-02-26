@@ -1,0 +1,31 @@
+FROM node:18.9.1-alpine3.15
+
+WORKDIR /build
+
+# Copy over all the source files
+COPY ./front-end ./front-end
+COPY ./models ./models
+
+WORKDIR /build/models
+RUN npm i
+RUN npm run build
+
+WORKDIR /build/front-end
+
+# Install the serve program
+RUN npm i -g serve
+
+# Install dependencies
+RUN yarn install --network-timeout 300000
+
+# Set appropriate environment variables for build
+ENV REACT_APP_BACKEND_API_HOST=''
+ENV REACT_APP_PEERJS_HOST='/'
+ENV REACT_APP_PEERJS_PORT='443'
+ENV REACT_APP_WEBSOCKET_SERVER_HOST=''
+
+# Build the production app
+RUN yarn run build
+
+# Serve the built app on container start up
+ENTRYPOINT [ "serve", "-s", "build" ]

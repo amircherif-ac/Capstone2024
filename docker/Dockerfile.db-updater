@@ -1,0 +1,21 @@
+FROM node:18.9.1-alpine3.15
+
+WORKDIR /build
+
+# Copy over all the source files
+COPY ./back-end ./back-end
+COPY ./models ./models
+
+WORKDIR /build/back-end
+
+# Set network timeout since the VM has slow download speeds
+RUN npm config set timeout 300000
+
+ENV CONCORDIA_API_USERNAME=525
+ENV CONCORDIA_API_PASSWORD=743ba9d27e8462a99bb79bfe097a2007
+
+# Install the dependencies
+RUN npm i --no-audit --no-fund
+
+# Start running the login service
+ENTRYPOINT [ "node", "./src/databaseUpdater.js" ]

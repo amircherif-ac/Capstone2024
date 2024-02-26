@@ -1,0 +1,6 @@
+{
+    "PORT": 5199,
+    "BACKEND_API_PROTOCOL": "http://",
+    "BACKEND_API_HOST": "back-end",
+    "BACKEND_API_PORT": 5000
+}
