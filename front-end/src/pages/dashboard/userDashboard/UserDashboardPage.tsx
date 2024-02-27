@@ -13,14 +13,10 @@ import {
     ListItemSecondaryAction,
     ListItemText,
     MenuItem,
-    Stack,
+    Stack, 
     TextField,
     Typography
   } from '@mui/material';
-
-  import MainCard from "C:/Code/Phase3/stp/front-end/src/components/MainCard.js";
-  import IncomeAreaChart from "C:/Code/Phase3/stp/front-end/src/pages/dashboard/userDashboard/IncomeAreaChart.js";
-  import MonthlyBarChart from "C:/Code/Phase3/stp/front-end/src/pages/dashboard/userDashboard/MonthlyBarChart.js";
 
 import {
     User,
