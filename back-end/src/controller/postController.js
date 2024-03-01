@@ -11,6 +11,8 @@ const CourseCode = db.course_codes;
 const User = db.users;
 const Tutor = db.tutor;
 const Teacher = db.teacher;
+const Tag = db.tags;
+const post_tags = db.posts_tags;
 
 // Create direct message
 exports.createPost = async (req, res) => {

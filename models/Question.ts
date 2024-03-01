@@ -40,3 +40,24 @@ export type PatchRequest = {
     postId: number,
     isVerified: boolean,
 }
+
+export type Tags = {
+    tagId: number,
+    tagName: string,
+}
+
+export type post_tags = {
+    postId: number,
+    tags?: string[], 
+}
+
+export type post_rating = {
+    postId: number,
+    ratingValue: number,
+}
+
+export type post_user_rating = {
+    postId: number,
+    userId: number,
+    ratingValue: number,
+}
