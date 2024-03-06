@@ -158,9 +158,10 @@ const CoursePage = (props: CoursePageProps) => {
     };
   }, []);
 
+  //IMPORTANT
   const fetchQuestionPosts = () => {
     setIsLoadingPosts(true);
-
+    console.log("This is the course data sent to the page", props.course);
     setTimeout(() => {
       //This is how you fetch the posts for a course
       axios
@@ -187,7 +188,6 @@ const CoursePage = (props: CoursePageProps) => {
               any,
               AxiosResponse<GetUserResponse>
             >(
-              //This API call is not documented
               process.env.REACT_APP_BACKEND_API_HOST +
                 "/api/user/" +
                 posts[i].userID,
@@ -207,7 +207,6 @@ const CoursePage = (props: CoursePageProps) => {
               );
               return;
             }
-            //this is what is causing problems!
             //this returns all the replies of the specified post
             let repliesResponse = await axios.get<any, AxiosResponse<Reply[]>>(
               process.env.REACT_APP_BACKEND_API_HOST +
@@ -216,7 +215,6 @@ const CoursePage = (props: CoursePageProps) => {
               {
                 timeout: 5000,
                 headers: {
-                  //this authorization - weirdly enough it works when getting the posts and userResponses
                   Authorization: `Bearer ${sessionStorage.getItem(
                     "accessToken"
                   )}`,
@@ -433,6 +431,7 @@ const CoursePage = (props: CoursePageProps) => {
     }, 1000);
   };
 
+  //IMPORTANT
   const onClickThread = (post: Post, author: User, replies: Reply[]) => {
     setThreadAuthorUsername(author.name);
     setThreadPost(post);

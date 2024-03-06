@@ -250,6 +250,7 @@ const Dashboard = (props: DashboardProps) => {
 
           setEnrolledCourses(courses);
           setIsFetchingEnrolledCourses(false);
+          console.log("list of enrolled courses DASHBOARD", courses);
         })
         .catch((error) => {
           setIsFetchingEnrolledCourses(false);
@@ -943,20 +944,27 @@ const Dashboard = (props: DashboardProps) => {
         {currentPage === Page.UserDashboard && <UserDashboardPage />}
 
         {/* THIS IS RELATED TO FORUM */}
-        {currentPage === Page.Forum && <ForumPage />}
+        {currentPage === Page.Forum && (
+          <ForumPage
+            isTeacher={false}
+            isTutor={undefined}
+            thisUser={thisUser}
+            enrolledCourses={enrolledCourses}
+          />
+        )}
 
         {currentPage === Page.CoursePage && selectedCoursePage !== "" && (
           <CoursePage
-            webSocket={props.webSocket}
-            inLiveSessionCallback={inLiveSessionCallback}
-            peerConnection={props.peerConnection}
-            hideSideNav={hideSideNav}
-            course={cachedCourseMap[selectedCoursePage]}
-            thisUser={thisUser}
-            onWithdraw={onWithdraw}
-            onSubmitNewQuestion={onSubmitNewQuestion}
             isTeacher={false}
             isTutor={undefined}
+            course={cachedCourseMap[selectedCoursePage]}
+            thisUser={thisUser}
+            webSocket={props.webSocket}
+            peerConnection={props.peerConnection}
+            onWithdraw={onWithdraw}
+            onSubmitNewQuestion={onSubmitNewQuestion}
+            hideSideNav={hideSideNav}
+            inLiveSessionCallback={inLiveSessionCallback}
           />
         )}
       </div>
