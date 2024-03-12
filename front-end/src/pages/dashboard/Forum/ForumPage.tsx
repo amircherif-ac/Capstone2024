@@ -16,6 +16,7 @@ import {
 import React, { useEffect, useState } from "react";
 import QuestionPost from "../coursePage/QuestionPost";
 import style from "styled-jsx/style";
+import { ThreadDialog } from "../coursePage/ThreadDialog";
 
 // This is what the page needs to work
 export type ForumPageProps = {
@@ -26,10 +27,6 @@ export type ForumPageProps = {
 };
 
 const ForumPage = (props: ForumPageProps) => {
-  let style =
-    "bg-white mb-5 flow-up-animation rounded-xl shadow-slate-500 shadow-sm flex flex-col overflow-hidden ";
-  const [isFetchingEnrolledCourses, setIsFetchingEnrolledCourses] =
-    useState(false);
   const [isLoadingPosts, setIsLoadingPosts] = useState(false);
   const [errorDialogMessage, setErrorDialogMessage] = useState<string | null>(
     null
@@ -173,8 +170,24 @@ const ForumPage = (props: ForumPageProps) => {
 
   return (
     <>
-      <div className="flex-1 flex flex-row">
-        <div className="w-1/2 mr-5 h-full">
+      {showThreadDialog && (
+        <ThreadDialog
+          replies={threadReplies}
+          showDialog={showThreadDialog}
+          authorUsername={threadAuthorUsername}
+          thisUser={props.thisUser}
+          post={threadPost}
+          parentDialogCloseCallback={() => {
+            setThreadAuthorUsername("");
+            setThreadPost(undefined);
+            setThreadReplies([]);
+            setShowThreadDialog(false);
+          }}
+        />
+      )}
+
+      <div className="h-full w-full p-5 flex flex-col flow-up-animation overflow-y-auto">
+        <div className="mr-5 h-full">
           {isLoadingPosts && (
             <div className="flex flex-col h-[400px] items-center justify-center">
               <CircularProgress />
