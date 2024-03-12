@@ -1,9 +1,4 @@
 import CircularProgress from "@mui/material/CircularProgress";
-import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
-import ListItem from "@mui/material/ListItem";
-import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
-import { Avatar } from "@mui/material";
-import ListItemButton from "@mui/material/ListItemButton";
 import axios, { AxiosResponse } from "axios";
 import {
   User,
@@ -12,11 +7,12 @@ import {
   GetUserResponse,
   Post,
   Reply,
+  Tags,
 } from "models";
 import React, { useEffect, useState } from "react";
 import QuestionPost from "../coursePage/QuestionPost";
-import style from "styled-jsx/style";
 import { ThreadDialog } from "../coursePage/ThreadDialog";
+import { response } from "express";
 
 // This is what the page needs to work
 export type ForumPageProps = {
@@ -43,8 +39,8 @@ const ForumPage = (props: ForumPageProps) => {
   //Fetches all of the posts from the classes the user is currently enrolled in
   useEffect(() => {
     for (const course of props.enrolledCourses) {
-      //console.log("fetching course ", course);
       fetchPostsFromEnrolledCourses(course.courseId);
+      fetchTagsfromDB();
     }
   }, []);
 
@@ -133,7 +129,7 @@ const ForumPage = (props: ForumPageProps) => {
 
             let courseReturned: Course = courseResponse.data;
 
-            console.log("This is the course that was returned", courseReturned);
+            //console.log("This is the course that was returned", courseReturned);
 
             postMapping.push([
               posts[i],
@@ -161,6 +157,25 @@ const ForumPage = (props: ForumPageProps) => {
     }, 1000);
   };
 
+  const fetchTagsfromDB = () => {
+    setTimeout(() => {
+      axios
+        .get<any, AxiosResponse<Tags[]>>(
+          process.env.REACT_APP_BACKEND_API_HOST + "/api/post/tags",
+          {
+            timeout: 5000,
+            headers: {
+              Authorization: `Bearer ${sessionStorage.getItem("accessToken")}`,
+            },
+          }
+        )
+        .then(async (response) => {
+          console.log("fetchTagsfromDB response data is ", response.data);
+        });
+    }, 1000);
+  };
+
+  // This is needed to open up the replies of a post
   const onClickThread = (post: Post, author: User, replies: Reply[]) => {
     setThreadAuthorUsername(author.name);
     setThreadPost(post);

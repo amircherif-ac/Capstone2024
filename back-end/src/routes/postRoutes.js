@@ -1,4 +1,5 @@
 const postController = require('../controller/postController')
+const tagController = require('../controller/tagController')
 const express = require('express')
 const router = express.Router()
 const { validateToken } = require('../middleware/AuthMiddleware')
@@ -15,6 +16,8 @@ router.patch('/verify', validateToken, postController.updateVerification)
 router.get('/course/:courseId', validateToken, postController.getPostByCourse)
 
 router.get('/course/verified/:courseId', validateToken, postController.getVerifiedPostByCourse)
+
+router.get('/tags', validateToken, tagController.getAllTags)
 
 // get specific
 router.get('/:postId', validateToken, postController.getPostById)
