@@ -40,7 +40,6 @@ const ForumPage = (props: ForumPageProps) => {
   useEffect(() => {
     for (const course of props.enrolledCourses) {
       fetchPostsFromEnrolledCourses(course.courseId);
-      fetchTagsfromDB();
     }
   }, []);
 
@@ -153,24 +152,6 @@ const ForumPage = (props: ForumPageProps) => {
           setErrorDialogMessage(
             "could not fetch questions for course, there was an error"
           );
-        });
-    }, 1000);
-  };
-
-  const fetchTagsfromDB = () => {
-    setTimeout(() => {
-      axios
-        .get<any, AxiosResponse<Tags[]>>(
-          process.env.REACT_APP_BACKEND_API_HOST + "/api/post/tags",
-          {
-            timeout: 5000,
-            headers: {
-              Authorization: `Bearer ${sessionStorage.getItem("accessToken")}`,
-            },
-          }
-        )
-        .then(async (response) => {
-          console.log("fetchTagsfromDB response data is ", response.data);
         });
     }, 1000);
   };

@@ -5,9 +5,12 @@ import {
   Dialog,
   Divider,
   FormControl,
+  FormControlLabel,
+  FormLabel,
   IconButton,
   InputLabel,
   MenuItem,
+  Radio,
   Select,
   TextField,
 } from "@mui/material";
@@ -31,6 +34,7 @@ import {
   SESSIONS_UPDATE,
   User,
   WithdrawRequest,
+  Tags,
 } from "models";
 import { useEffect, useState } from "react";
 import ErrorDialog from "../../../components/ErrorDialog";
@@ -41,7 +45,7 @@ import {
   ArrowForwardIos as ArrowForwardIosIcon,
   Group as GroupIcon,
 } from "@mui/icons-material/";
-
+import RadioGroup, { useRadioGroup } from "@mui/material/RadioGroup";
 import QuestionPost from "./QuestionPost";
 import ThreadDialog from "./ThreadDialog";
 import { Socket } from "socket.io-client";
@@ -117,9 +121,12 @@ const CoursePage = (props: CoursePageProps) => {
   const [enrolledUsers, setEnrolledUsers] = useState<EnrolledUser[]>([]);
   const [isTutor, setIsTutor] = useState(false);
   const [isTeacher, setIsTeacher] = useState(false);
+  const [radioValue, setRadioValue] = useState("");
+  const [tags, setTags] = useState<Tags[]>([]);
 
   useEffect(() => {
     fetchQuestionPosts();
+    fetchTagsfromDB();
   }, []);
 
   useEffect(() => {
@@ -158,10 +165,47 @@ const CoursePage = (props: CoursePageProps) => {
     };
   }, []);
 
-  //IMPORTANT
+  //This method relates to the radio buttons when creating a post
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    console.log(
+      "This is the current selected value of the radio",
+      (event.target as HTMLInputElement).value
+    );
+    setRadioValue((event.target as HTMLInputElement).value);
+  };
+
+  // This method fetches all the tags from the DB for use throughout the file
+  const fetchTagsfromDB = () => {
+    setTimeout(() => {
+      axios
+        .get<any, AxiosResponse<Tags[]>>(
+          process.env.REACT_APP_BACKEND_API_HOST + "/api/post/tags",
+          {
+            timeout: 5000,
+            headers: {
+              Authorization: `Bearer ${sessionStorage.getItem("accessToken")}`,
+            },
+          }
+        )
+        .then(async (response) => {
+          let tag = response.data;
+          let tagMapping: Tags[] = [];
+
+          for (let i = 0; i < tag.length; i++) {
+            tagMapping.push(tag[i]);
+          }
+
+          setTags(tagMapping);
+        })
+        .catch((err) => {
+          console.log("fetchTagsERROR", err);
+        });
+    }, 1000);
+  };
+
+  //This function fetches all the posts for a course
   const fetchQuestionPosts = () => {
     setIsLoadingPosts(true);
-    console.log("This is the course data sent to the page", props.course);
     setTimeout(() => {
       //This is how you fetch the posts for a course
       axios
@@ -318,7 +362,6 @@ const CoursePage = (props: CoursePageProps) => {
         }
       )
       .then((response) => {
-        //console.log(response.data);
         setEnrolledUsers(response.data.enrollees);
       })
       .catch((error) => {
@@ -341,9 +384,6 @@ const CoursePage = (props: CoursePageProps) => {
         }
       )
       .then((response) => {
-        // response.data.foreach((element:any)=>{
-        //     console.log(element)
-        // })
         for (let index = 0; index < response.data.length; index++) {
           let userId = response.data[index].userID.toString();
           if (userId === props.thisUser.id) {
@@ -374,9 +414,6 @@ const CoursePage = (props: CoursePageProps) => {
         }
       )
       .then((response) => {
-        // response.data.foreach((element:any)=>{
-        //     console.log(element)
-        // })
         for (let index = 0; index < response.data.length; index++) {
           let userId = response.data[index].userID.toString();
           if (userId === props.thisUser.id) {
@@ -699,6 +736,7 @@ const CoursePage = (props: CoursePageProps) => {
                 setNewPostContent("");
               }}
             >
+              {/* This is where you need to add the tags */}
               <div className="flex flex-row">
                 <div className="w-[75px] bg-primary"></div>
                 <div className="flex flex-col flex-1 p-5">
@@ -737,6 +775,29 @@ const CoursePage = (props: CoursePageProps) => {
                         : ""
                     }
                   />
+                  <div className="flex flex-row justify-left">
+                    <FormControl>
+                      <FormLabel id="demo-controlled-radio-buttons-group">
+                        Add a tag to your post!
+                      </FormLabel>
+                      <RadioGroup
+                        aria-labelledby="demo-controlled-radio-buttons-group"
+                        name="controlled-radio-buttons-group"
+                        value={radioValue}
+                        onChange={handleChange}
+                      >
+                        {tags.map((tag) => {
+                          return (
+                            <FormControlLabel
+                              value={tag.tagName}
+                              control={<Radio />}
+                              label={tag.tagName}
+                            />
+                          );
+                        })}
+                      </RadioGroup>
+                    </FormControl>
+                  </div>
                   <div className="flex flex-row justify-end">
                     <Button
                       className="mr-5 font-jakarta-sans"
