@@ -3,7 +3,6 @@ import {
   Button,
   CircularProgress,
   Dialog,
-  Divider,
   FormControl,
   FormControlLabel,
   FormLabel,
@@ -167,11 +166,24 @@ const CoursePage = (props: CoursePageProps) => {
 
   //This method relates to the radio buttons when creating a post
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedValue = (event.target as HTMLInputElement).value;
     console.log(
       "This is the current selected value of the radio",
-      (event.target as HTMLInputElement).value
+      selectedValue
     );
-    setRadioValue((event.target as HTMLInputElement).value);
+
+    setRadioValue((prevRadioValue) => {
+      console.log("Previous value of the radio", prevRadioValue);
+      return selectedValue;
+    });
+  };
+
+  const findTagIDByTagName = (
+    tags: Tags[],
+    tagName: string
+  ): number | undefined => {
+    const foundTag = tags.find((tag) => tag.tagName === tagName);
+    return foundTag ? foundTag.tagID : undefined;
   };
 
   // This method fetches all the tags from the DB for use throughout the file
@@ -309,12 +321,15 @@ const CoursePage = (props: CoursePageProps) => {
       return;
     }
 
+    const tagID = findTagIDByTagName(tags, radioValue);
+
     const request: PostRequest = {
       userId: parseInt(props.thisUser.id),
       courseId: props.course.courseId,
       postTitle: newPostTitle,
       postText: newPostContent,
-      postImagePath: "", //TODO
+      postImagePath: "",
+      tagID: tagID,
     };
 
     setTimeout(() => {

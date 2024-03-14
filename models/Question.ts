@@ -34,6 +34,7 @@ export type PostRequest = {
     postTitle: string,
     postText: string,
     postImagePath: string,
+    tagID?: number,
 }
 
 export type PatchRequest = {
@@ -42,21 +43,21 @@ export type PatchRequest = {
 }
 
 export type Tags = {
-    tagId: number,
+    tagID: number,
     tagName: string,
 }
 
-export type post_tags = {
+export type Post_Tags = {
     postId: number,
-    tags?: string[], 
+    tagID: number, 
 }
 
-export type post_rating = {
+export type Post_Rating = {
     postId: number,
     ratingValue: number,
 }
 
-export type post_user_rating = {
+export type Post_User_Rating = {
     postId: number,
     userId: number,
     ratingValue: number,

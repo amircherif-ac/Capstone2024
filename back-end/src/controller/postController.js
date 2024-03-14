@@ -19,12 +19,14 @@ exports.createPost = async (req, res) => {
     const postTitle = req.body.postTitle;
     const postText = req.body.postText;
     const postImagePath = req.body.postImagePath;
+    const tagID = req.body.tagID;
     Post.create({
         userID: userId,
         courseID: courseId,
         post_title: postTitle,
         post_text: postText,
-        post_image_path: postImagePath
+        post_image_path: postImagePath,
+        tagID: tagID
     }).then(result => {
         io.getIO().emit('posts', { action: 'create', post: result });
         res.status(StatusCode.SuccessCreated).send(result);

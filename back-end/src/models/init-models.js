@@ -20,7 +20,8 @@ var _threads = require("./threads");
 var _tutor = require("./tutor");
 var _users = require("./users");
 var _tags = require("./tags");
-var _post_tags = require("./post_tags")
+var _post_tags = require("./post_tags");
+const { post } = require(".");
 //var _post_rating = require("./post_rating")
 
 function initModels(sequelize) {
@@ -153,7 +154,7 @@ function initModels(sequelize) {
     faculty,
     meeting_guest,
     posts,
-    post_tags,
+//    post_tags,
 //    post_rating,
     program,
     replies,
