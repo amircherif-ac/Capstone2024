@@ -4,7 +4,6 @@ const { Op } = require("sequelize");
 
 // create models
 const TimeSpent = db.timespent
-const User = db.users
 
 // create time spent log
 exports.createTimeSpent = async (req, res) => {

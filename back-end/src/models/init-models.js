@@ -21,6 +21,7 @@ var _tutor = require("./tutor");
 var _users = require("./users");
 //====================================================================================
 var _timespent = require("./timespent");
+var _metrics_logs = require("./metrics_logs");
 
 function initModels(sequelize) {
   var calendar = _calendar(sequelize, DataTypes);
@@ -45,6 +46,7 @@ function initModels(sequelize) {
   var users = _users(sequelize, DataTypes);
   //====================================================================================
   var timespent = _timespent(sequelize, DataTypes);
+  var metrics_logs = _metrics_logs(sequelize, DataTypes);
 
   calendar.belongsToMany(users, { as: 'userID_users_meeting_guests', through: meeting_guest, foreignKey: "eventID", otherKey: "userID" });
   courses.belongsToMany(users, { as: 'userID_users', through: enrolled, foreignKey: "courseID", otherKey: "userID" });
@@ -109,6 +111,8 @@ function initModels(sequelize) {
   //====================================================================================
   timespent.belongsTo(users, { as: "user", foreignKey: "userID"});
   users.hasMany(timespent, { as: "timespents", foreignKey: "userID"});
+  metrics_logs.belongsTo(users, { as: "user", foreignKey: "userID"});
+  users.hasMany(metrics_logs, { as: "metrics_logs", foreignKey: "userID"});
 
   return {
     calendar,
@@ -132,6 +136,7 @@ function initModels(sequelize) {
     tutor,
     users,
     timespent,
+    metrics_logs,
   };
 }
 module.exports = initModels;
