@@ -61,8 +61,8 @@ function initModels(sequelize) {
   courses.belongsToMany(users, { as: 'userID_users_tutors', through: tutor, foreignKey: "courseID", otherKey: "userID" });
   users.belongsToMany(courses, { as: 'courseID_courses_tutors', through: tutor, foreignKey: "userID", otherKey: "courseID" }); 
   
-  tags.belongsToMany(posts, {as: 'postID_posts_tags', through: post_tags, foreignKey: "tagID", otherKey: "postID"});
-  posts.belongsToMany(tags, {as: 'tagID_tags_post', through: post_tags, foreignKey: "postID", otherKey: "tagID"});
+  // tags.belongsToMany(posts, {as: 'postID_posts_tags', through: post_tags, foreignKey: "tagID", otherKey: "postID"});
+  // posts.belongsToMany(tags, {as: 'tagID_tags_post', through: post_tags, foreignKey: "postID", otherKey: "tagID"});
 
   meeting_guest.belongsTo(calendar, { as: "event", foreignKey: "eventID"});
   calendar.hasMany(meeting_guest, { as: "meeting_guests", foreignKey: "eventID"});
@@ -141,6 +141,9 @@ function initModels(sequelize) {
 
   tutor.belongsTo(users, { as: "user", foreignKey: "userID"});
   users.hasMany(tutor, { as: "tutors", foreignKey: "userID"});
+
+  posts.belongsTo(tags, {as: "tags", foreignKey: "tagID"});
+  tags.hasMany(posts, {as: "posts", foreignKey: "tagID"});
 
   return {
     calendar,

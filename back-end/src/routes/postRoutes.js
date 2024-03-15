@@ -17,6 +17,9 @@ router.get('/course/:courseId', validateToken, postController.getPostByCourse)
 
 router.get('/course/verified/:courseId', validateToken, postController.getVerifiedPostByCourse)
 
+// get post/api/tags/{tagID}
+router.get('/tags/:tagID', validateToken, postController.getPostByTagID)
+
 // get /api/post/tags
 router.get('/tags', validateToken, tagController.getAllTags)
 

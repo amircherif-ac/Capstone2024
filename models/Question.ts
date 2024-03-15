@@ -16,6 +16,7 @@ export type Post = {
     post_text: string,
     post_date: number,
     post_image_path: string,
+    tags?: string[],
 }
 
 export type Reply = {
