@@ -984,6 +984,7 @@ const Dashboard = (props: DashboardProps) => {
 
                 {currentPage === Page.UserDashboard && (
                     <UserDashboardPage 
+                        thisUser={thisUser}
                     />
                 )}
 

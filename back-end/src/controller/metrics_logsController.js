@@ -52,8 +52,7 @@ exports.getTotalTimeSpentPerMonth = async (req, res) => {
             [db.sequelize.fn('month', db.sequelize.col('logdate')), 'month'],
             [db.sequelize.fn('sum', db.sequelize.col('val')), 'totalTimeSpent']
         ],
-        group: [db.sequelize.fn('month', db.sequelize.col('logdate'))],
-        order: [[db.sequelize.fn('month', db.sequelize.col('logdate')), 'ASC']]
+        group: [db.sequelize.fn('month', db.sequelize.col('logdate'))]
     }).then(result => {
         res.status(StatusCode.SuccessOK).send(result);
     }).catch(err => {
@@ -78,8 +77,7 @@ exports.getTotalSessionAttendedPerMonth = async (req, res) => {
             [db.sequelize.fn('month', db.sequelize.col('logdate')), 'month'],
             [db.sequelize.fn('sum', db.sequelize.col('val')), 'totalSessionAttended']
         ],
-        group: [db.sequelize.fn('month', db.sequelize.col('logdate'))],
-        order: [[db.sequelize.fn('month', db.sequelize.col('logdate')), 'ASC']]
+        group: [db.sequelize.fn('month', db.sequelize.col('logdate'))]
     }).then(result => {
         res.status(StatusCode.SuccessOK).send(result);
     }).catch(err => {
@@ -104,8 +102,7 @@ exports.getAvgAssessmentGradePerMonth = async (req, res) => {
             [db.sequelize.fn('month', db.sequelize.col('logdate')), 'month'],
             [db.sequelize.fn('avg', db.sequelize.col('val')), 'avgAssessmentGrade']
         ],
-        group: [db.sequelize.fn('month', db.sequelize.col('logdate'))],
-        order: [[db.sequelize.fn('month', db.sequelize.col('logdate')), 'ASC']]
+        group: [db.sequelize.fn('month', db.sequelize.col('logdate'))]
     }).then(result => {
         res.status(StatusCode.SuccessOK).send(result);
     }).catch(err => {
@@ -130,8 +127,7 @@ exports.getEngagementLevelPerMonth = async (req, res) => {
             [db.sequelize.fn('month', db.sequelize.col('logdate')), 'month'],
             [db.sequelize.fn('avg', db.sequelize.col('val')), 'engagementLevel']
         ],
-        group: [db.sequelize.fn('month', db.sequelize.col('logdate'))],
-        order: [[db.sequelize.fn('month', db.sequelize.col('logdate')), 'ASC']]
+        group: [db.sequelize.fn('month', db.sequelize.col('logdate'))]
     }).then(result => {
         res.status(StatusCode.SuccessOK).send(result);
     }).catch(err => {
@@ -156,8 +152,7 @@ exports.getTotalTimeSpentPerDay = async (req, res) => {
             [db.sequelize.fn('date', db.sequelize.col('logdate')), 'date'],
             [db.sequelize.fn('sum', db.sequelize.col('val')), 'totalTimeSpent']
         ],
-        group: [db.sequelize.fn('date', db.sequelize.col('logdate'))],
-        order: [[db.sequelize.fn('date', db.sequelize.col('logdate')), 'ASC']]
+        group: [db.sequelize.fn('date', db.sequelize.col('logdate'))]
     }).then(result => {
         res.status(StatusCode.SuccessOK).send(result);
     }).catch(err => {
@@ -182,8 +177,7 @@ exports.getTotalSessionAttendedPerDay = async (req, res) => {
             [db.sequelize.fn('date', db.sequelize.col('logdate')), 'date'],
             [db.sequelize.fn('sum', db.sequelize.col('val')), 'totalSessionAttended']
         ],
-        group: [db.sequelize.fn('date', db.sequelize.col('logdate'))],
-        order: [[db.sequelize.fn('date', db.sequelize.col('logdate')), 'ASC']]
+        group: [db.sequelize.fn('date', db.sequelize.col('logdate'))]
     }).then(result => {
         res.status(StatusCode.SuccessOK).send(result);
     }).catch(err => {
@@ -208,8 +202,7 @@ exports.getAvgAssessmentGradePerDay = async (req, res) => {
             [db.sequelize.fn('date', db.sequelize.col('logdate')), 'date'],
             [db.sequelize.fn('avg', db.sequelize.col('val')), 'avgAssessmentGrade']
         ],
-        group: [db.sequelize.fn('date', db.sequelize.col('logdate'))],
-        order: [[db.sequelize.fn('date', db.sequelize.col('logdate')), 'ASC']]
+        group: [db.sequelize.fn('date', db.sequelize.col('logdate'))]
     }).then(result => {
         res.status(StatusCode.SuccessOK).send(result);
     }).catch(err => {
@@ -234,8 +227,7 @@ exports.getEngagementLevelPerDay = async (req, res) => {
             [db.sequelize.fn('date', db.sequelize.col('logdate')), 'date'],
             [db.sequelize.fn('avg', db.sequelize.col('val')), 'engagementLevel']
         ],
-        group: [db.sequelize.fn('date', db.sequelize.col('logdate'))],
-        order: [[db.sequelize.fn('date', db.sequelize.col('logdate')), 'ASC']]
+        group: [db.sequelize.fn('date', db.sequelize.col('logdate'))]
     }).then(result => {
         res.status(StatusCode.SuccessOK).send(result);
     }).catch(err => {
