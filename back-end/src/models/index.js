@@ -56,10 +56,14 @@ db.replies = models.replies
 db.thread = models.threads
 db.calendar = models.calendar
 db.guest = models.meeting_guest
+db.timespent = models.timespent
 
-db.sequelize.sync({ force: false })
+db.sequelize.sync()
     .then(() => {
         console.log('re-sync done')
+    })
+    .catch(err => {
+        console.log('Error' + err)
     })
 
 module.exports = db

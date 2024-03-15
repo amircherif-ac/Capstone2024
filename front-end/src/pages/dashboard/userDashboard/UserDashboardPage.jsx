@@ -16,7 +16,7 @@ import MonthlyBarChart from './MonthlyBarChart';
 import MainCard from '../../../components/MainCard';
 import AnalyticComp from '../../../components/third-party/AnalyticComp';
 
-const UserDashboardPage = () => {
+const UserDashboardPage = (prop) => {
 
     const [slot, setSlot] = useState('week');
 

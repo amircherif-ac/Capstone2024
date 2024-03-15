@@ -3,8 +3,8 @@ const { StatusCode } = require('status-code-enum');
 const { Op } = require("sequelize");
 
 // create models
-const TimeSpent = db.timespent;
-const User = db.users;
+const TimeSpent = db.timespent
+const User = db.users
 
 // create time spent log
 exports.createTimeSpent = async (req, res) => {
@@ -34,4 +34,11 @@ exports.getUserTimeSpent = async (req, res) => {
     });
 }
 
-
+// Get all logs
+exports.getAllLogs = async (req, res) => {
+    TimeSpent.findAll().then(threads => {
+        res.status(StatusCode.SuccessOK).send(threads);
+    }).catch(err => {
+        res.status(StatusCode.ServerErrorInternal).send({ message: err.message });
+    });
+}

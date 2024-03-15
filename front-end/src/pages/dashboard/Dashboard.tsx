@@ -976,11 +976,15 @@ const Dashboard = (props: DashboardProps) => {
                 )}
 
                 {currentPage === Page.LearningPath && (
-                    <LearningPathPage />
+                    <LearningPathPage 
+                        thisUser={thisUser}
+                        enrolledCourses={enrolledCourses}
+                    />
                 )}
 
                 {currentPage === Page.UserDashboard && (
-                    <UserDashboardPage />
+                    <UserDashboardPage 
+                    />
                 )}
 
                 {currentPage === Page.CoursePage &&
