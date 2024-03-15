@@ -58,11 +58,6 @@ app.use('/api/guest', guestRoutes);
 // Redirect request to tutor endpoint 
 const teacherRoutes = require('./routes/teacherRoutes');
 app.use('/api/teacher', teacherRoutes);
-//========================================================================================================================
-// Redirect request to time spent endpoint
-const timeSpentRoutes = require('./routes/timespentRoutes');
-app.use('/api/timespent', timeSpentRoutes);
-//========================================================================================================================
 
 
 app.get("/", (req, res) => {
