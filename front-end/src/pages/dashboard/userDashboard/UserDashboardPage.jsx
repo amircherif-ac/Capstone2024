@@ -16,9 +16,9 @@ import MonthlyBarChart from './MonthlyBarChart';
 import MainCard from '../../../components/MainCard';
 import AnalyticComp from '../../../components/third-party/AnalyticComp';
 
-const UserDashboardPage = (props) => {
+const API_URL = process.env.REACT_APP_BACKEND_API_HOST;
 
-  const API_URL = process.env.REACT_APP_BACKEND_API_HOST;
+const UserDashboardPage = (props) => {
 
   const [slot, setSlot] = useState('week');
   const [userTimeSpentThisMonth, setUserTimeSpentThisMonth] = useState(0);
@@ -31,6 +31,76 @@ const UserDashboardPage = (props) => {
   const [SessionAttendedThisMonthCompareToLastColor, setSessionAttendedThisMonthCompareToLastColor] = useState("primary");
   const [SessionAttendedThisMonthCompareToLastArrow, setSessionAttendedThisMonthCompareToLastArrow] = useState(false);
 
+  const [userAvgAssessmentGrade, setUserAvgAssessmentGrade] = useState(0);
+  const [userAvgAssessmentGradeCompareToLast, setUserAvgAssessmentGradeCompareToLast] = useState(0);
+  const [userAvgAssessmentGradeCompareToLastColor, setUserAvgAssessmentGradeCompareToLastColor] = useState("primary");
+  const [userAvgAssessmentGradeCompareToLastArrow, setUserAvgAssessmentGradeCompareToLastArrow] = useState(false);
+
+  const [userEngagementLevel, setUserEngagementLevel] = useState(0);
+  const [userEngagementLevelCompareToLast, setUserEngagementLevelCompareToLast] = useState(0);
+  const [userEngagementLevelCompareToLastColor, setUserEngagementLevelCompareToLastColor] = useState("primary");
+  const [userEngagementLevelCompareToLastArrow, setUserEngagementLevelCompareToLastArrow] = useState(false);
+
+  // calculate letter grade out of percentage
+  function percentageToLetterGrade(percentage) {
+    if (percentage >= 90) {
+        return 'A+';
+    } else if (percentage >= 85) {
+        return 'A';
+    } else if (percentage >= 80) {
+        return 'A-';
+    } else if (percentage >= 77) {
+        return 'B+';
+    } else if (percentage >= 73) {
+        return 'B';
+    } else if (percentage >= 70) {
+        return 'B-';
+    } else if (percentage >= 67) {
+        return 'C+';
+    } else if (percentage >= 63) {
+        return 'C';
+    } else if (percentage >= 60) {
+        return 'C-';
+    } else if (percentage >= 57) {
+        return 'D+';
+    } else if (percentage >= 53) {
+        return 'D';
+    } else if (percentage >= 50) {
+        return 'D-';
+    } else {
+        return 'FNS';
+    }
+  }
+
+  function engagementLevelToDescription(engagementLevel) {
+    if (engagementLevel >= 4.30) {
+        return 'Outstanding';
+    } else if (engagementLevel >= 4.00) {
+        return 'Outstanding';
+    } else if (engagementLevel >= 3.70) {
+        return 'Outstanding';
+    } else if (engagementLevel >= 3.30) {
+        return 'Very good';
+    } else if (engagementLevel >= 3.00) {
+        return 'Very good';
+    } else if (engagementLevel >= 2.70) {
+        return 'Very good';
+    } else if (engagementLevel >= 2.30) {
+        return 'Satisfactory';
+    } else if (engagementLevel >= 2.00) {
+        return 'Satisfactory';
+    } else if (engagementLevel >= 1.70) {
+        return 'Satisfactory';
+    } else if (engagementLevel >= 1.30) {
+        return 'Marginal pass';
+    } else if (engagementLevel >= 1.00) {
+        return 'Marginal pass';
+    } else if (engagementLevel >= 0.70) {
+        return 'Marginal pass';
+    } else {
+        return 'Failure';
+    }
+}
 
   useEffect(() => {
     async function totalTimeSpentCurrentMonth() {
@@ -127,6 +197,95 @@ const UserDashboardPage = (props) => {
   }
   , []);
 
+  useEffect(() => {
+    async function AvgAssessmentGradeCurrentMonth() {
+      try {
+          const response = await fetch(`${API_URL}/api/metrics_logs/avgassessmentgrademonth/${props.thisUser.id}`);
+          const data = await response.json();
+          
+          // Get the current month
+          const currentMonth = new Date().getMonth() + 1;
+          // Get the last month
+          const lastMonth = currentMonth - 1 === 0 ? 12 : currentMonth - 1;
+
+          // Find the object for the current month
+          const thisMonthData = data.find(item => item.month === currentMonth);
+
+          // Find the object for the last month
+          const lastMonthData = data.find(item => item.month === lastMonth);
+
+          // Extract AvgAssessmentGrade for the current month
+          const thisMonthAvgAssessmentGrade = thisMonthData ? thisMonthData.avgAssessmentGrade : 0;
+          setUserAvgAssessmentGrade(percentageToLetterGrade(thisMonthAvgAssessmentGrade));
+
+          // Extract AvgAssessmentGrade for the last month
+          const lastMonthAvgAssessmentGrade = lastMonthData ? lastMonthData.avgAssessmentGrade : 0;
+
+          // Compare the total session attended for the current month to the last month (percentage increase or decrease)
+          if (lastMonthAvgAssessmentGrade != 0) {
+              const compareResult = ((thisMonthAvgAssessmentGrade - lastMonthAvgAssessmentGrade) / lastMonthAvgAssessmentGrade) * 100;
+              if (compareResult < 0) {
+                setUserAvgAssessmentGradeCompareToLast(Math.abs(compareResult));
+                setUserAvgAssessmentGradeCompareToLastColor("warning");
+                setUserAvgAssessmentGradeCompareToLastArrow(true);
+              }
+              else{
+                  setUserAvgAssessmentGradeCompareToLast(compareResult);
+              }
+          }
+
+      } catch (error) {
+          console.error('Error fetching user session attended:', error);
+      }
+    }
+    AvgAssessmentGradeCurrentMonth();
+  }
+  , []);
+
+  useEffect(() => {
+    async function EngagementLevelCurrentMonth() {
+      try {
+          const response = await fetch(`${API_URL}/api/metrics_logs/engagementlevelmonth/${props.thisUser.id}`);
+          const data = await response.json();
+          
+          // Get the current month
+          const currentMonth = new Date().getMonth() + 1;
+          // Get the last month
+          const lastMonth = currentMonth - 1 === 0 ? 12 : currentMonth - 1;
+
+          // Find the object for the current month
+          const thisMonthData = data.find(item => item.month === currentMonth);
+
+          // Find the object for the last month
+          const lastMonthData = data.find(item => item.month === lastMonth);
+
+          // Extract EngagementLevel for the current month
+          const thisMonthEngagementLevel = thisMonthData ? thisMonthData.engagementLevel : 0;
+          setUserEngagementLevel(engagementLevelToDescription(thisMonthEngagementLevel));
+
+          // Extract EngagementLevel for the last month
+          const lastMonthEngagementLevel = lastMonthData ? lastMonthData.engagementLevel : 0;
+
+          // Compare the total session attended for the current month to the last month (percentage increase or decrease)
+          if (lastMonthEngagementLevel != 0) {
+              const compareResult = ((thisMonthEngagementLevel - lastMonthEngagementLevel) / lastMonthEngagementLevel) * 100;
+              if (compareResult < 0) {
+                setUserEngagementLevelCompareToLast(Math.abs(compareResult));
+                setUserEngagementLevelCompareToLastColor("warning");
+                setUserEngagementLevelCompareToLastArrow(true);
+              }
+              else{
+                  setUserEngagementLevelCompareToLast(compareResult);
+              }
+          }
+
+      } catch (error) {
+          console.error('Error fetching user session attended:', error);
+      }
+    }
+    EngagementLevelCurrentMonth();
+  }
+  , []);
 
   return (
       <div className="h-full w-full p-5 flex flex-row flow-up-animation">
@@ -138,7 +297,6 @@ const UserDashboardPage = (props) => {
                 <Grid item xs={12} sx={{ mb: -2.25 }}>
                   <Typography variant="h6">Dashboard</Typography>
                 </Grid>
-                {/* count={`${metric1LastMonth} hours`} */}
                 <Grid item xs={12} sm={6} md={4} lg={3}>
                   <AnalyticComp title="Total Time Spent" 
                   count={userTimeSpentThisMonth + " hours"} 
@@ -156,10 +314,20 @@ const UserDashboardPage = (props) => {
                   />
                 </Grid>
                 <Grid item xs={12} sm={6} md={4} lg={3}>
-                  <AnalyticComp title="Avg Assessment grade" count="B-" percentage={27.4} isLoss color="warning" extra="1,943" />
+                  <AnalyticComp title="Avg Assessment grade" 
+                  count={userAvgAssessmentGrade}
+                  percentage={Number(userAvgAssessmentGradeCompareToLast.toFixed(2))}
+                  color={userAvgAssessmentGradeCompareToLastColor}
+                  isLoss={userAvgAssessmentGradeCompareToLastArrow}
+                  />
                 </Grid>
                 <Grid item xs={12} sm={6} md={4} lg={3}>
-                  <AnalyticComp title="Engagement Level" count="Satisfactory" percentage={17.4} isLoss color="warning" extra="$20,395" />
+                  <AnalyticComp title="Engagement Level" 
+                  count={userEngagementLevel}
+                  percentage={Number(userEngagementLevelCompareToLast.toFixed(2))}
+                  color={userEngagementLevelCompareToLastColor}
+                  isLoss={userEngagementLevelCompareToLastArrow}
+                  />
                 </Grid>
 
                 <Grid item md={8} sx={{ display: { sm: 'none', md: 'block', lg: 'none' } }} />
@@ -193,7 +361,7 @@ const UserDashboardPage = (props) => {
                   </Grid>
                   <MainCard content={false} sx={{ mt: 1.5 }}>
                     <Box sx={{ pt: 1, pr: 2 }}>
-                      <IncomeAreaChart slot={slot} />
+                      <IncomeAreaChart slot={slot} thisUser={props.thisUser}/>
                     </Box>
                   </MainCard>
                 </Grid>
@@ -213,7 +381,7 @@ const UserDashboardPage = (props) => {
                         <Typography variant="h3">21.57 hours</Typography>
                       </Stack>
                     </Box>
-                    <MonthlyBarChart />
+                    <MonthlyBarChart thisUser={props.thisUser}/>
                   </MainCard>
                 </Grid>
               </Grid>
