@@ -57,10 +57,7 @@ const UserDashboardPage = (props) => {
           const lastMonthTotalTimeSpent = lastMonthData ? lastMonthData.totalTimeSpent : 0;
 
           // Compare the total time spent for the current month to the last month (percentage increase or decrease)
-          if (lastMonthTotalTimeSpent === 0) {
-              setTimeSpentThisMonthCompareToLast("n/a ");
-          }
-          else{
+          if (lastMonthTotalTimeSpent != 0 ) {
               const compareResult = ((thisMonthTotalTimeSpent - lastMonthTotalTimeSpent) / lastMonthTotalTimeSpent) * 100;
               if (compareResult < 0) {
                 setTimeSpentThisMonthCompareToLast(Math.abs(compareResult));
@@ -70,6 +67,9 @@ const UserDashboardPage = (props) => {
               else{
                 setTimeSpentThisMonthCompareToLast(compareResult);
               }
+          }
+          else {
+            setTimeSpentThisMonthCompareToLastColor("secondary");
           }
 
       } catch (error) {
@@ -104,20 +104,20 @@ const UserDashboardPage = (props) => {
           const lastMonthTotalSessionAttended = lastMonthData ? lastMonthData.totalSessionAttended : 0;
 
           // Compare the total session attended for the current month to the last month (percentage increase or decrease)
-          if (lastMonthTotalSessionAttended === 0) {
-              setSessionAttendedThisMonthCompareToLast("n/a ");
-          }
-          else{
+          if (lastMonthTotalSessionAttended != 0) {
               const compareResult = ((thisMonthTotalSessionAttended - lastMonthTotalSessionAttended) / lastMonthTotalSessionAttended) * 100;
               if (compareResult < 0) {
                 setSessionAttendedThisMonthCompareToLast(Math.abs(compareResult));
                 setSessionAttendedThisMonthCompareToLastColor("warning");
                 setSessionAttendedThisMonthCompareToLastArrow(true);
-            }
-            else{
-                setSessionAttendedThisMonthCompareToLast(compareResult);
-            }
+              }
+              else{
+                  setSessionAttendedThisMonthCompareToLast(compareResult);
+              }
           }
+          else {
+            setSessionAttendedThisMonthCompareToLastColor("secondary");
+        }
 
       } catch (error) {
           console.error('Error fetching user session attended:', error);
