@@ -2,22 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { Container, Typography } from '@mui/material';
 
 const LearningPathPage = (props) => {
-    const [userTimeSpent, setUserTimeSpent] = useState([]);
-    const API_URL = process.env.REACT_APP_BACKEND_API_HOST
-
-    useEffect(() => {
-        async function fetchUserTimeSpent() {
-            try {
-                const response = await fetch(`${API_URL}/api/timespent/user/${props.thisUser.id}`);
-                const resData = await response.json();
-                setUserTimeSpent(resData);
-            } catch (error) {
-                console.error('Error fetching user time spent:', error);
-            }
-        }
-
-        fetchUserTimeSpent();
-    }, []);
 
     return (
         <div className="h-full w-full p-5 flex flex-row flow-up-animation">
@@ -31,17 +15,6 @@ const LearningPathPage = (props) => {
                         {props.enrolledCourses.map(course => (
                             <li key={course.courseId}>
                                 <Typography variant="h7">{course.courseId} {course.courseTitle}</Typography>
-                            </li>
-                        ))}
-                    </Container>
-                    
-                    <Container>
-                        <Typography variant="h5">=============================</Typography>
-                        <Typography variant="h5">User Dashboard API Testing...</Typography>
-                        <Typography variant="h5">=============================</Typography>
-                        {userTimeSpent.map(log => (
-                            <li key={log.logID}>
-                                <Typography variant="h7">{log.logID} - {log.timeSpentLog} - {log.date} </Typography>
                             </li>
                         ))}
                     </Container>
