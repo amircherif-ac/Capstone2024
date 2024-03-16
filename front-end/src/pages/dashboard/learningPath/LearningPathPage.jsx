@@ -3,11 +3,12 @@ import { Container, Typography } from '@mui/material';
 
 const LearningPathPage = (props) => {
     const [userTimeSpent, setUserTimeSpent] = useState([]);
+    const API_URL = process.env.REACT_APP_BACKEND_API_HOST
 
     useEffect(() => {
         async function fetchUserTimeSpent() {
             try {
-                const response = await fetch(`http://localhost:5000/api/timespent/user/${props.thisUser.id}`);
+                const response = await fetch(`${API_URL}/api/timespent/user/${props.thisUser.id}`);
                 const resData = await response.json();
                 setUserTimeSpent(resData);
             } catch (error) {

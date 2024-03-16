@@ -1,4 +1,3 @@
-// node_modules\.bin\sequelize-auto sequelize-auto -o "./src/models" -d study_hero -h localhost -u root -p 3306 -x test -e mysql
 const dbConfig = require('../config/dbConfig');
 const initModels = require('./init-models').initModels
 
@@ -57,6 +56,7 @@ db.thread = models.threads
 db.calendar = models.calendar
 db.guest = models.meeting_guest
 db.timespent = models.timespent
+db.metrics_logs = models.metrics_logs
 
 db.sequelize.sync()
     .then(() => {
