@@ -59,6 +59,11 @@ app.use('/api/guest', guestRoutes);
 const teacherRoutes = require('./routes/teacherRoutes');
 app.use('/api/teacher', teacherRoutes);
 
+//========================================================================================================================
+// Redirect request to metrics logs endpoint
+const metricsLogsRoutes = require('./routes/metrics_logsRoutes');
+app.use('/api/metrics_logs', metricsLogsRoutes);
+//========================================================================================================================
 
 app.get("/", (req, res) => {
     console.log("Got request from frontend!")
