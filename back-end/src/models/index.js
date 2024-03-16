@@ -57,6 +57,7 @@ db.thread = models.threads
 db.calendar = models.calendar
 db.guest = models.meeting_guest
 db.tags = models.tags
+db.post_rating = models.post_rating
 
 db.sequelize.sync({ force: false })
     .then(() => {

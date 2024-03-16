@@ -37,7 +37,7 @@ module.exports = function(sequelize, DataTypes) {
                 unique: true,
                 using: "BTREE",
                 fields: [
-                    { name: voteID }
+                    { name: "voteID" }
                 ]
             },
             {

@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import { Course, Post, User } from "models";
+import { Course, Post, Post_User_Rating, User } from "models";
 import { Button, TextField, Card, CardContent, Grid } from "@mui/material";
 import axios, { AxiosResponse } from "axios";
+import { response } from "express";
 
 function sanitizeString(str: string) {
   // remove HTML tags
@@ -425,11 +426,61 @@ const convertToCSV = (data: Post[]): string => {
   return `${header}\n${rows.join("\n")}`;
 };
 
+const testCreatePostRating = () => {
+  const request: Post_User_Rating = {
+    userID: 1,
+    postID: 5,
+    rating: 1,
+  };
+  axios
+    .post<Post_User_Rating>(
+      process.env.REACT_APP_BACKEND_API_HOST + "/api/post/createRating",
+      request,
+      {
+        timeout: 5000,
+        headers: {
+          Authorization: `Bearer ${sessionStorage.getItem("accessToken")}`,
+        },
+      }
+    )
+    .then((response) => {
+      //console.log("This is the result of creating a post rating", response);
+      //ADD MORE LOGIC HERE
+    })
+    .catch((error) => {
+      console.log("Error in createPostRating", error);
+    });
+};
+
+const testFindPostRating = () => {
+  const request: Post_User_Rating = {
+    userID: 2,
+    postID: 5,
+    rating: 1,
+  };
+  axios
+    .get<Post_User_Rating>(
+      process.env.REACT_APP_BACKEND_API_HOST + "/api/post/findRating/1/5",
+      {
+        timeout: 5000,
+        headers: {
+          Authorization: `Bearer ${sessionStorage.getItem("accessToken")}`,
+        },
+      }
+    )
+    .then((response) => {
+      console.log("This is the result of finding a post rating", response);
+      //ADD MORE LOGIC HERE
+    })
+    .catch((error) => {
+      console.log("Error in testFindPostRating", error);
+    });
+};
+
 export const Admin = (props: AdminPageProps) => {
   const [username, setUsername] = useState("");
   const [course, setCourse] = useState("");
   const [tagId, setTagId] = useState(-1);
-  const [fileName, setFileName] = useState("");
 
   // this doesnt work
   // TODO: fix this
@@ -491,9 +542,9 @@ export const Admin = (props: AdminPageProps) => {
                     // fullWidth
                     variant="contained"
                     sx={{ marginTop: 1 }}
-                    onClick={() => {}}
+                    onClick={() => testFindPostRating()}
                   >
-                    WIP 3
+                    testFindPostRating
                   </Button>
                 </Grid>
                 {/* <Grid item>

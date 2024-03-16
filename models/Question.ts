@@ -49,17 +49,17 @@ export type Tags = {
 }
 
 export type Post_Tags = {
-    postId: number,
+    postID: number,
     tagID: number, 
 }
 
 export type Post_Rating = {
-    postId: number,
-    ratingValue: number,
+    postID: number,
+    rating: number,
 }
 
 export type Post_User_Rating = {
-    postId: number,
-    userId: number,
-    ratingValue: number,
+    postID: number,
+    userID: number,
+    rating: number,
 }

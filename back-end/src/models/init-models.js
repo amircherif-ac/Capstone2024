@@ -21,8 +21,7 @@ var _tutor = require("./tutor");
 var _users = require("./users");
 var _tags = require("./tags");
 var _post_tags = require("./post_tags");
-const { post } = require(".");
-//var _post_rating = require("./post_rating")
+var _post_rating = require("./post_rating")
 
 function initModels(sequelize) {
   var calendar = _calendar(sequelize, DataTypes);
@@ -37,7 +36,7 @@ function initModels(sequelize) {
   var meeting_guest = _meeting_guest(sequelize, DataTypes);
   var posts = _posts(sequelize, DataTypes);
   var post_tags = _post_tags(sequelize, DataTypes);
-//  var post_rating = _post_rating(sequelize, DataTypes);
+  var post_rating = _post_rating(sequelize, DataTypes);
   var program = _program(sequelize, DataTypes);
   var replies = _replies(sequelize, DataTypes);
   var role = _role(sequelize, DataTypes);
@@ -158,7 +157,7 @@ function initModels(sequelize) {
     meeting_guest,
     posts,
 //    post_tags,
-//    post_rating,
+    post_rating,
     program,
     replies,
     role,

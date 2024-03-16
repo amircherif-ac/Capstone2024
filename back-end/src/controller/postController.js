@@ -143,7 +143,6 @@ exports.getPostByTagID = async (req, res) => {
     const tagID = req.params.tagID;
     Post.findAll({
         where: { tagID: tagID },
-        // include causing issues 
         include: [
             { model: Tags, as: 'tags', attributes: ['tagName'] }
         ],
