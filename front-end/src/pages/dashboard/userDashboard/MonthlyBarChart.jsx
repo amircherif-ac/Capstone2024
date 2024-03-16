@@ -6,6 +6,16 @@ import { useTheme } from '@mui/material/styles';
 // third-party
 import ReactApexChart from 'react-apexcharts';
 
+const API_URL = process.env.REACT_APP_BACKEND_API_HOST;
+
+// Dynamic x axis for week view
+function getRotatedDays() {
+  const days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+  const currentDayIndex = new Date().getDay(); // Get the index of the current day
+  const rotatedDays = days.slice(currentDayIndex).concat(days.slice(0, currentDayIndex));
+  return rotatedDays;
+}
+
 // chart options
 const barChartOptions = {
   chart: {
@@ -25,7 +35,7 @@ const barChartOptions = {
     enabled: false
   },
   xaxis: {
-    categories: ['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'],
+    categories: getRotatedDays(),
     axisBorder: {
       show: false
     },
@@ -41,17 +51,37 @@ const barChartOptions = {
   }
 };
 
-// ==============================|| MONTHLY BAR CHART ||============================== //
-
-const MonthlyBarChart = () => {
+const MonthlyBarChart = (props) => {
   const theme = useTheme();
 
   const { primary, secondary } = theme.palette.text;
   const info = theme.palette.info.light;
 
-  const [series] = useState([
+  // Process fetched daily data
+  function processDailyData(data) {
+    const result = [];
+    const currentDate = new Date();
+    for (let i = 0; i < 7; i++) {
+      const currentDateKey = currentDate.toISOString().split('T')[0];
+      // Check if the entry for the current date exists
+      const existingEntry = data.find(entry => entry.date === currentDateKey);
+      if (existingEntry) {
+        result.push(existingEntry); // Add existing entry
+      } else {
+        result.push({ date: currentDateKey, totalTimeSpent: 0 }); // Add new entry with totalTimeSpent = 0
+      }
+      currentDate.setDate(currentDate.getDate()-1); // Move to the previous day because ISO week starts from Monday not Sunday
+    }
+    const reversedResult = result.reverse(); // Reverse the result array to get the data in ascending order
+    const processedData = reversedResult.map(entry => {
+      return Number(entry.totalTimeSpent.toFixed(2));
+    });
+    return processedData;
+  }
+
+  const [series, setSeries] = useState([
     {
-      data: [80, 95, 70, 42, 65, 55, 78]
+      data: []
     }
   ]);
 
@@ -74,6 +104,28 @@ const MonthlyBarChart = () => {
     }));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [primary, info, secondary]);
+
+    useEffect(() => {
+    async function setBarChart() {
+      try {
+        // Total Time Spent for the current week
+        const totalTimeSpentCurrentWeekResponse = await fetch(`${API_URL}/api/metrics_logs/totaltimespentday/${props.thisUser.id}`);
+        const totalTimeSpentCurrentWeekEntries = await totalTimeSpentCurrentWeekResponse.json();
+        const totalTimeSpentCurrentWeek = processDailyData(totalTimeSpentCurrentWeekEntries, "totalTimeSpent");
+
+        setSeries([
+          {
+            data: totalTimeSpentCurrentWeek
+          }
+        ]);
+        
+      }
+      catch (error) {
+          console.error('Error:', error);
+      }
+    }
+    setBarChart();
+  }, );
 
   return (
     <div id="chart">
