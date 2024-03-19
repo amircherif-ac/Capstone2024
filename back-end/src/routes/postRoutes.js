@@ -29,6 +29,10 @@ router.get('/tags', validateToken, tagController.getAllTags)
 
 router.get('/findRating/:userID/:postID', validateToken, post_ratingController.findPostRating)
 
+router.put('/update/:userID/:postID/:rating', post_ratingController.updatePostRating)
+
+router.get('/countRating/:postID', post_ratingController.getPostVotes)
+
 // get specific
 router.get('/:postId', validateToken, postController.getPostById)
 

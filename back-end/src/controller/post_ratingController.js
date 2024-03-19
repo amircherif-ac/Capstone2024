@@ -42,3 +42,46 @@ exports.findPostRating = (req, res) => {
         res.status(StatusCode.ServerErrorInternal).send({ message: err.message });
     })
 }
+
+exports.updatePostRating = (req, res) => {
+    const userID = req.params.userID;
+    const postID = req.params.postID;
+    const rating = req.params.rating;
+
+    Post_Rating.update({
+        rating: rating,
+    }, {
+        where: {
+            [Op.and]: [
+                { postID: postID },
+                { userID: userID }
+            ]
+        },
+    })
+    .then(result => {
+        res.status(StatusCode.SuccessOK).send({ message: `Post rating updated.`})
+    }).catch(err => {
+        console.log('error finding post rating: ' + err)
+        res.status(StatusCode.ServerErrorInternal).send({ message: err.message });
+    })
+}
+
+exports.getPostVotes = (req, res) => {
+    const postID = req.params.postID;
+
+    Post_Rating.findAll({
+        attributes: [
+            [db.sequelize.fn('SUM', db.sequelize.col('rating')), 'rating']
+        ],
+        where: {
+            postID: postID
+        }
+    })
+    .then(result => {
+        res.status(StatusCode.SuccessOK).send(result)
+    })
+    .catch(err => {
+        console.log('error getting post rating: ' + err);
+        res.status(StatusCode.ServerErrorInternal).send({ message: err.message });
+    })
+}

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Course, Post, Post_User_Rating, User } from "models";
+import { Course, Post, Post_Rating, Post_User_Rating, User } from "models";
 import { Button, TextField, Card, CardContent, Grid } from "@mui/material";
 import axios, { AxiosResponse } from "axios";
 import { response } from "express";
@@ -426,6 +426,7 @@ const convertToCSV = (data: Post[]): string => {
   return `${header}\n${rows.join("\n")}`;
 };
 
+// This method tests if the user can vote on a post
 const testCreatePostRating = () => {
   const request: Post_User_Rating = {
     userID: 1,
@@ -452,6 +453,7 @@ const testCreatePostRating = () => {
     });
 };
 
+// This method fetches the user's vote rating to be displayed on the front-end
 const testFindPostRating = () => {
   const request: Post_User_Rating = {
     userID: 2,
@@ -460,7 +462,7 @@ const testFindPostRating = () => {
   };
   axios
     .get<Post_User_Rating>(
-      process.env.REACT_APP_BACKEND_API_HOST + "/api/post/findRating/1/5",
+      process.env.REACT_APP_BACKEND_API_HOST + "/api/post/findRating/1/5/",
       {
         timeout: 5000,
         headers: {
@@ -474,6 +476,56 @@ const testFindPostRating = () => {
     })
     .catch((error) => {
       console.log("Error in testFindPostRating", error);
+    });
+};
+
+// This method test if the user can change the rating they gave on a post
+const testUpdatePostRating = () => {
+  const request: Post_User_Rating = {
+    userID: 2,
+    postID: 5,
+    rating: 1,
+  };
+  axios
+    .put<Post_User_Rating>(
+      process.env.REACT_APP_BACKEND_API_HOST + "/api/post/update/1/5/1",
+      {
+        timeout: 5000,
+        headers: {
+          Authorization: `Bearer ${sessionStorage.getItem("accessToken")}`,
+        },
+      }
+    )
+    .then((response) => {
+      console.log("This is the result of updating a post rating", response);
+      //ADD MORE LOGIC HERE
+    })
+    .catch((error) => {
+      console.log("Error in testUpdatePostRating", error);
+    });
+};
+
+// This method fetches the total count of votes a post has
+const testFetchPostVotes = () => {
+  axios
+    .get<Post_Rating>(
+      process.env.REACT_APP_BACKEND_API_HOST + "/api/post/countRating/5",
+      {
+        timeout: 5000,
+        headers: {
+          Authorization: `Bearer ${sessionStorage.getItem("accessToken")}`,
+        },
+      }
+    )
+    .then((response) => {
+      console.log(
+        "This is the result of updating a post rating",
+        response.data[0].rating
+      );
+      //ADD MORE LOGIC HERE
+    })
+    .catch((error) => {
+      console.log("Error in testUpdatePostRating", error);
     });
 };
 
@@ -542,9 +594,20 @@ export const Admin = (props: AdminPageProps) => {
                     // fullWidth
                     variant="contained"
                     sx={{ marginTop: 1 }}
-                    onClick={() => testFindPostRating()}
+                    onClick={() => testUpdatePostRating()}
                   >
-                    testFindPostRating
+                    testUpdatePostRating
+                  </Button>
+                </Grid>
+                <Grid item>
+                  <Button
+                    type="submit"
+                    // fullWidth
+                    variant="contained"
+                    sx={{ marginTop: 1 }}
+                    onClick={() => testFetchPostVotes()}
+                  >
+                    testFetchPostVotes
                   </Button>
                 </Grid>
                 {/* <Grid item>
