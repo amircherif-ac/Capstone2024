@@ -8,6 +8,7 @@ import {
   Post,
   Reply,
   Tags,
+  Post_Rating,
 } from "models";
 import React, { useEffect, useState } from "react";
 import QuestionPost from "../coursePage/QuestionPost";
@@ -28,7 +29,7 @@ const ForumPage = (props: ForumPageProps) => {
     null
   );
   const [questionPosts, setQuestionPosts] = useState<
-    [Post, User, Reply[], Course][]
+    [Post, User, Reply[], Course, number][]
   >([]);
   const [threadAuthorUsername, setThreadAuthorUsername] = useState<string>("");
   const [threadPost, setThreadPost] = useState<Post | undefined>(undefined);
@@ -65,7 +66,7 @@ const ForumPage = (props: ForumPageProps) => {
         .then(async (response) => {
           //The response contains all the posts of the course and the users attached to the posts
           let posts = response.data;
-          let postMapping: [Post, User, Reply[], Course][] = [];
+          let postMapping: [Post, User, Reply[], Course, number][] = [];
 
           for (let i = 0; i < posts.length; i++) {
             //This fetches the responses the user has made on each fetched post
@@ -128,16 +129,35 @@ const ForumPage = (props: ForumPageProps) => {
 
             let courseReturned: Course = courseResponse.data;
 
-            //console.log("This is the course that was returned", courseReturned);
+            let postRating = await axios.get<Post_Rating>(
+              process.env.REACT_APP_BACKEND_API_HOST +
+                "/api/post/countRating/" +
+                posts[i].postID,
+              {
+                timeout: 5000,
+                headers: {
+                  Authorization: `Bearer ${sessionStorage.getItem(
+                    "accessToken"
+                  )}`,
+                },
+              }
+            );
+
+            let rating = parseInt(postRating.data[0].rating);
+            if (isNaN(rating)) {
+              rating = 0;
+            }
 
             postMapping.push([
               posts[i],
               authorUser,
               repliesResponse.data,
               courseReturned,
+              rating,
             ]);
           }
 
+          console.log("PostMapping data", postMapping);
           setIsLoadingPosts(false);
           // update client recoil state
           setQuestionPosts((prev) =>
@@ -202,24 +222,27 @@ const ForumPage = (props: ForumPageProps) => {
           {/* This is what needs to be modified for posts to appear */}
           {!isLoadingPosts && questionPosts.length > 0 && (
             <div className="flex-col h-full w-full flow-up-animation pb-20">
-              {questionPosts.map(([post, author, replies, course], idx) => {
-                return (
-                  <QuestionPost
-                    thisUser={props.thisUser}
-                    isVerified={post.is_post_verified}
-                    isTeacher={props.isTeacher}
-                    isTutor={props.isTutor}
-                    authorUser={author}
-                    post={post}
-                    id={idx}
-                    replies={replies}
-                    Course={course}
-                    showThreadDialogCallback={() => {
-                      onClickThread(post, author, replies);
-                    }}
-                  />
-                );
-              })}
+              {questionPosts.map(
+                ([post, author, replies, course, rating], idx) => {
+                  return (
+                    <QuestionPost
+                      thisUser={props.thisUser}
+                      isVerified={post.is_post_verified}
+                      isTeacher={props.isTeacher}
+                      isTutor={props.isTutor}
+                      authorUser={author}
+                      post={post}
+                      id={idx}
+                      replies={replies}
+                      Course={course}
+                      ratings={rating}
+                      showThreadDialogCallback={() => {
+                        onClickThread(post, author, replies);
+                      }}
+                    />
+                  );
+                }
+              )}
             </div>
           )}
         </div>

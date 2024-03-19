@@ -471,7 +471,7 @@ const testFindPostRating = () => {
       }
     )
     .then((response) => {
-      console.log("This is the result of finding a post rating", response);
+      console.log("This is the result of finding a post rating", response.data);
       //ADD MORE LOGIC HERE
     })
     .catch((error) => {
@@ -570,9 +570,9 @@ export const Admin = (props: AdminPageProps) => {
                     // fullWidth
                     variant="contained"
                     sx={{ marginTop: 1 }}
-                    onClick={() => fetchQuestionPosts()}
+                    onClick={() => testFindPostRating()}
                   >
-                    FetchQuestionPosts
+                    testFindPostRating
                   </Button>
                 </Grid>
 

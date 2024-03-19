@@ -36,7 +36,7 @@ exports.findPostRating = (req, res) => {
             ]
         },
     }).then(result => {
-        res.status(StatusCode.SuccessCreated).send(result);
+        res.status(StatusCode.SuccessOK).send(result);
     }).catch(err => {
         console.log('error creating post rating: ' + err)
         res.status(StatusCode.ServerErrorInternal).send({ message: err.message });

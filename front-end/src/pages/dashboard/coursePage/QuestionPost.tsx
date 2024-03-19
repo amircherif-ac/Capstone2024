@@ -1,9 +1,19 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ArrowForwardIosIcon from "@mui/icons-material/ArrowForwardIos";
 import ChatBubbleOutlineIcon from "@mui/icons-material/ChatBubbleOutline";
 import { Avatar } from "@mui/material";
-import { Course, Post, Reply, User, PatchRequest } from "models";
+import {
+  Course,
+  Post,
+  Reply,
+  User,
+  PatchRequest,
+  Post_Rating,
+  Post_User_Rating,
+} from "models";
 import axios from "axios";
+import ArrowCircleUpTwoToneIcon from "@mui/icons-material/ArrowCircleUpTwoTone";
+import ArrowCircleDownTwoToneIcon from "@mui/icons-material/ArrowCircleDownTwoTone";
 
 export type QuestionPostProps = {
   thisUser: User;
@@ -15,6 +25,7 @@ export type QuestionPostProps = {
   isVerified: boolean;
   isTeacher: boolean;
   isTutor: boolean;
+  ratings: number;
   showThreadDialogCallback: (
     post: Post,
     author: string,
@@ -28,6 +39,67 @@ export const QuestionPost = (props: QuestionPostProps) => {
   const animationDelay: string = `${0.1 * props.id}s`;
   let date = new Date(props.post.post_date);
   const [isVerified, setIsVerified] = useState(props.isVerified);
+  const [rating, setRating] = useState(props.ratings);
+  const [isUpvoted, setIsUpvoted] = useState<boolean>(false);
+  const [isDownvoted, setIsDownvoted] = useState<boolean>(false);
+  const [hasUserVoted, setHasUserVoted] = useState<boolean>(false);
+  const UPVOTE_VALUE = 1;
+  const DOWNVOTE_VALUE = -1;
+  const NEUTRAL_VALUE = 0;
+
+  useEffect(() => {
+    userPostRating();
+  }, []);
+
+  useEffect(() => {
+    console.log("isUpvoted:", isUpvoted);
+    console.log("isDownvoted:", isDownvoted);
+    console.log("hasUserVoted:", hasUserVoted);
+    // Any operations that depend on the updated state can be performed here
+    // For example, updating post ratings
+    //updatedPostRatings();
+  }, [isUpvoted, isDownvoted, hasUserVoted]);
+
+  // This function determines if the user: upvoted, downvoted or removed his rating to a post
+  const userPostRating = () => {
+    axios
+      .get<Post_User_Rating>(
+        process.env.REACT_APP_BACKEND_API_HOST +
+          "/api/post/findRating/" +
+          props.thisUser.id +
+          "/" +
+          props.post.postID,
+        {
+          timeout: 5000,
+          headers: {
+            Authorization: `Bearer ${sessionStorage.getItem("accessToken")}`,
+          },
+        }
+      )
+      .then((response) => {
+        //console.log("This is the result of finding a post rating", response);
+
+        const userPostRating = response.data;
+
+        // Set the state values for the user's rating
+        if (Object.keys(userPostRating).length === 0) {
+          //No changes
+          return;
+        } else {
+          if (userPostRating.rating == UPVOTE_VALUE) {
+            setIsUpvoted((prevValue) => !prevValue);
+            setHasUserVoted((prevValue) => !prevValue);
+            return;
+          } else if (userPostRating.rating == DOWNVOTE_VALUE) {
+            setIsDownvoted((prevValue) => !prevValue);
+            setHasUserVoted((prevValue) => !prevValue);
+          }
+        }
+      })
+      .catch((error) => {
+        console.log("Error in testFindPostRating", error);
+      });
+  };
 
   const verifyPost = async (verifyPost: boolean) => {
     let response = await axios.patch<PatchRequest>(
@@ -53,6 +125,107 @@ export const QuestionPost = (props: QuestionPostProps) => {
     }
 
     setIsVerified(verifyPost);
+  };
+
+  const updateUpvote = () => {
+    setIsUpvoted((prevValue) => !prevValue);
+    setIsDownvoted(false); // Reset isDownvoting
+
+    if (!hasUserVoted) {
+      createPostRating(UPVOTE_VALUE);
+      setHasUserVoted((prevValue) => !prevValue);
+    } else {
+      //Figure out the update!
+    }
+  };
+
+  const updateDownvote = () => {
+    setIsDownvoted((prevValue) => !prevValue);
+    setIsUpvoted(false); // Reset isUpvoted
+
+    if (!hasUserVoted) {
+      createPostRating(DOWNVOTE_VALUE);
+      setHasUserVoted((prevValue) => !prevValue);
+    } else {
+      //Figure out the update
+    }
+  };
+
+  const createPostRating = async (rating: number) => {
+    const request: Post_User_Rating = {
+      userID: parseInt(props.thisUser.id),
+      postID: props.post.postID,
+      rating: rating,
+    };
+    axios
+      .post<Post_User_Rating>(
+        process.env.REACT_APP_BACKEND_API_HOST + "/api/post/createRating",
+        request,
+        {
+          timeout: 5000,
+          headers: {
+            Authorization: `Bearer ${sessionStorage.getItem("accessToken")}`,
+          },
+        }
+      )
+      .then((response) => {
+        //console.log("This is the result of creating a post rating", response);
+        //ADD MORE LOGIC HERE
+      })
+      .catch((error) => {
+        console.log("Error in createPostRating", error);
+      });
+  };
+
+  const updatePostRating = async (rating: number) => {
+    axios
+      .put<Post_User_Rating>(
+        process.env.REACT_APP_BACKEND_API_HOST +
+          "/api/post/update/" +
+          parseInt(props.thisUser.id) +
+          "/" +
+          props.post.postID +
+          "/" +
+          rating,
+        {
+          timeout: 5000,
+          headers: {
+            Authorization: `Bearer ${sessionStorage.getItem("accessToken")}`,
+          },
+        }
+      )
+      .then((response) => {
+        console.log("This is the result of updating a post rating", response);
+        //ADD MORE LOGIC HERE
+      })
+      .catch((error) => {
+        console.log("Error in testUpdatePostRating", error);
+      });
+  };
+
+  const updatedPostRatings = async () => {
+    axios
+      .get<Post_Rating>(
+        process.env.REACT_APP_BACKEND_API_HOST +
+          "/api/post/countRating/" +
+          props.post.postID,
+        {
+          timeout: 5000,
+          headers: {
+            Authorization: `Bearer ${sessionStorage.getItem("accessToken")}`,
+          },
+        }
+      )
+      .then((response) => {
+        console.log(
+          "This is the result of updating a post rating",
+          response.data[0].rating
+        );
+        setRating(parseInt(response.data[0].rating));
+      })
+      .catch((error) => {
+        console.log("Error in testUpdatePostRating", error);
+      });
   };
 
   return (
@@ -97,6 +270,44 @@ export const QuestionPost = (props: QuestionPostProps) => {
             {props.replies.length}{" "}
             {props.replies.length === 1 ? "Reply" : "Replies"}
           </h1>
+        </div>
+        <div className="flex-row flex z-5">
+          <div
+            className="bg-primary w-[125px] z-10 shadow-slate-500 shadow-md flex flex-row items-center p-5 transition ease-in-out 
+                        mr-5 justify-center"
+          >
+            {isUpvoted && !isDownvoted ? (
+              <>
+                <ArrowCircleUpTwoToneIcon
+                  className="text-green-500 mr-5 hover:bg-green-500 duration-300 hover:cursor-pointer"
+                  onClick={() => updateUpvote()}
+                />
+              </>
+            ) : (
+              <>
+                <ArrowCircleUpTwoToneIcon
+                  className="text-white mr-5 hover:bg-green-500 duration-300 hover:cursor-pointer"
+                  onClick={() => updateUpvote()}
+                />
+              </>
+            )}
+            <h1 className="text-white">{rating}</h1>
+            {!isUpvoted && isDownvoted ? (
+              <>
+                <ArrowCircleDownTwoToneIcon
+                  className="text-red-500 ml-5 hover:bg-red-500 duration-300 hover:cursor-pointer"
+                  onClick={() => updateDownvote()}
+                />
+              </>
+            ) : (
+              <>
+                <ArrowCircleDownTwoToneIcon
+                  className="text-white ml-5 hover:bg-red-500 duration-300 hover:cursor-pointer"
+                  onClick={() => updateDownvote()}
+                />
+              </>
+            )}
+          </div>
         </div>
         <div className="flex-row flex z-10">
           {!isVerified &&

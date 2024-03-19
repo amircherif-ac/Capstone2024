@@ -34,6 +34,7 @@ import {
   User,
   WithdrawRequest,
   Tags,
+  Post_Rating,
 } from "models";
 import { useEffect, useState } from "react";
 import ErrorDialog from "../../../components/ErrorDialog";
@@ -91,9 +92,9 @@ const CoursePage = (props: CoursePageProps) => {
     SortStrategy.Newest
   );
   const [isLoadingPosts, setIsLoadingPosts] = useState(false);
-  const [questionPosts, setQuestionPosts] = useState<[Post, User, Reply[]][]>(
-    []
-  );
+  const [questionPosts, setQuestionPosts] = useState<
+    [Post, User, Reply[], number][]
+  >([]);
   const [newQuestionDialogOpen, setNewQuestionDialogOpen] = useState(false);
   const [newPostTitle, setNewPostTitle] = useState("");
   const [newPostTitleError, setNewPostTitleError] = useState(false);
@@ -236,7 +237,7 @@ const CoursePage = (props: CoursePageProps) => {
         .then(async (response) => {
           //The response contains all the posts of the course and the users attached to the posts
           let posts = response.data;
-          let postMapping: [Post, User, Reply[]][] = [];
+          let postMapping: [Post, User, Reply[], number][] = [];
 
           for (let i = 0; i < posts.length; i++) {
             //This fetches the responses the user has made on each fetched post
@@ -277,15 +278,40 @@ const CoursePage = (props: CoursePageProps) => {
                 },
               }
             );
+
+            let postRating = await axios.get<Post_Rating>(
+              process.env.REACT_APP_BACKEND_API_HOST +
+                "/api/post/countRating/" +
+                posts[i].postID,
+              {
+                timeout: 5000,
+                headers: {
+                  Authorization: `Bearer ${sessionStorage.getItem(
+                    "accessToken"
+                  )}`,
+                },
+              }
+            );
+
             let authorUser: User = {
               id: authorUserResponse.data.userID.toString(),
               name: authorUserResponse.data.username,
               peerID: "",
               accessToken: "",
             };
-            postMapping.push([posts[i], authorUser, repliesResponse.data]);
-          }
 
+            let rating = parseInt(postRating.data[0].rating);
+            if (isNaN(rating)) {
+              rating = 0;
+            }
+            postMapping.push([
+              posts[i],
+              authorUser,
+              repliesResponse.data,
+              rating,
+            ]);
+          }
+          //console.log("PostMapping data", postMapping);
           setIsLoadingPosts(false);
           setQuestionPosts(postMapping);
         })
@@ -1030,7 +1056,7 @@ const CoursePage = (props: CoursePageProps) => {
               {/* This is what needs to be modified for posts to appear */}
               {!isLoadingPosts && questionPosts.length > 0 && (
                 <div className="flex flex-col h-full w-full flow-up-animation pb-20">
-                  {questionPosts.map(([post, author, replies], idx) => {
+                  {questionPosts.map(([post, author, replies, rating], idx) => {
                     return (
                       <QuestionPost
                         thisUser={props.thisUser}
@@ -1042,6 +1068,7 @@ const CoursePage = (props: CoursePageProps) => {
                         id={idx}
                         replies={replies}
                         Course={props.course}
+                        ratings={rating}
                         showThreadDialogCallback={() => {
                           onClickThread(post, author, replies);
                         }}
