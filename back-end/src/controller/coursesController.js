@@ -131,11 +131,26 @@ const getCourseIdByName = async (req, res) => {
     } catch (error) {
         console.log(error);
     }
-};
+}
+
+// get all courses for AI, only return courseId, courseTitle, description
+const getAllCoursesAI = async (req, res) => {
+    // // retun hello world
+    // res.status(StatusCode.SuccessOK).send({ message: "Hello World!" })
+    try {
+        const courses = await Courses.findAll({
+            attributes: ['courseId', 'courseTitle', 'description']
+        });
+        res.status(StatusCode.SuccessOK).send(courses)
+    } catch (err) {
+        res.status(StatusCode.ServerErrorInternal).send({ message: err.message });
+    }
+}
 
 
 module.exports = {
     getAllCourses,
     getCourseById,
-    getCourseIdByName
+    getCourseIdByName,
+    getAllCoursesAI
 }

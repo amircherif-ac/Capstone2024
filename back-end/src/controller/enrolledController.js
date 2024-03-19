@@ -2,6 +2,7 @@ const db = require('../models');
 const { StatusCode } = require('status-code-enum');
 const { Op } = require("sequelize");
 const Sequelize = require('sequelize');
+const { arrayBuffer } = require('stream/consumers');
 
 // create models
 const Enrolled = db.enrolled
@@ -195,3 +196,24 @@ exports.updateEnrollmentStatus = async (req, res, next) => {
     })
 }
 
+//================================================================================================
+// Added for AI integration purposes
+
+// given user id, get the courses id if the user is currently enrolled
+exports.getUsersEnrolledCoursesAI = async (req, res, next) => {
+    const userId = req.params.userId;
+    Enrolled.findAll({
+        where: {
+            userID: userId,
+            isCurrentlyEnrolled: true
+        },
+        attributes: ['courseID']
+    }).then(courses => {
+        // extract the course id from the result as array of integers
+        const course_ids = courses.map(course => course.courseID);
+        
+        res.status(StatusCode.SuccessOK).send(course_ids);
+    }).catch(err => {
+        res.status(StatusCode.ServerErrorInternal).send({ message: err.message });
+    });
+}
