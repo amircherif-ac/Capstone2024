@@ -12,8 +12,13 @@ router.get('/courseStudents/:courseId', validateToken, enrolledController.getCur
 router.get('/courseStudentsV2/:courseId', validateToken, enrolledController.getCurrentEnrollmentsV2)
 
 
-router.get('/studentCourses/:userId', validateToken, enrolledController.getUsersEnrolledCourses)
+router.get('/studentCourses/:userId', enrolledController.getUsersEnrolledCourses)
 
 router.put('/statusUpdate', validateToken, enrolledController.updateEnrollmentStatus)
+
+//================================================================================================
+// Added for AI integration purposes
+
+router.get('/courseStudentsAI/:userId', enrolledController.getUsersEnrolledCoursesAI)
 
 module.exports = router
