@@ -1,16 +1,27 @@
 import pandas as pd
 import numpy as np
-import plotly.graph_objects as go
+# import plotly.graph_objects as go
 from sklearn.cluster import KMeans
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.decomposition import PCA
+from fetch_data import get_all_courses
 
+# ============================== Flask ==============================
+from flask import Flask
+import json
+
+app = Flask(__name__)
+port = 5007
+# ============================== Flask ==============================
+
+logedInUserID = 1
 
 # Content based filtering
 
 # read courses and user tags
 course = pd.read_csv("Course_Desc.csv", header=0)
+# course = get_all_courses()
 
 # Display DataFrames
 print("Courses DataFrame:")
@@ -49,22 +60,22 @@ course['cluster'] = kmeans.labels_
 pca = PCA(n_components=2)
 reduced_data = pca.fit_transform(tfidf_matrix.toarray())
 
-# Plot each cluster
-fig = go.Figure()
-colors = ['blue', 'green', 'red', 'cyan', 'magenta', 'yellow', 'orange', 'purple', 'brown']
-for i in range(len(colors)):
-    x = reduced_data[:, 0][kmeans.labels_ == i]
-    y = reduced_data[:, 1][kmeans.labels_ == i]
-    fig.add_trace(go.Scatter(x=x, y=y, mode='markers', marker=dict(color=colors[i])))
+# # Plot each cluster
+# fig = go.Figure()
+# colors = ['blue', 'green', 'red', 'cyan', 'magenta', 'yellow', 'orange', 'purple', 'brown']
+# for i in range(len(colors)):
+#     x = reduced_data[:, 0][kmeans.labels_ == i]
+#     y = reduced_data[:, 1][kmeans.labels_ == i]
+#     fig.add_trace(go.Scatter(x=x, y=y, mode='markers', marker=dict(color=colors[i])))
 
-# fig layout
-fig.update_layout(
-    title='Clusters after PCA Reduction',
-    xaxis_title='PCA1',
-    yaxis_title='PCA2',
-    showlegend=True
-)
-fig.show()
+# # fig layout
+# fig.update_layout(
+#     title='Clusters after PCA Reduction',
+#     xaxis_title='PCA1',
+#     yaxis_title='PCA2',
+#     showlegend=True
+# )
+# fig.show()
 
 
 # Function to recommend similar course
@@ -128,6 +139,17 @@ print(recommend_courses_by_description(course_title))
 # Test the function
 print("Recommend courses based on cluster:")
 print(recommend_courses_by_cluster(course_title))
+
+# ============================== Flask ==============================
+@app.get('/suggestion')
+def suggestion():
+    arrResult = recommend_courses_by_cluster(course_title)
+    arrResult_json = arrResult.to_json(orient='records')
+    return arrResult_json
+
+if __name__ == '__main__':
+    app.run(debug=False, port=port)
+# ============================== Flask ============================== 
 
 
 # Regression kNN
