@@ -20,16 +20,22 @@ logedInUserID = 1
 # Content based filtering
 
 # read courses and user tags
-course = pd.read_csv("Course_Desc.csv", header=0)
-# course = get_all_courses()
+#course = pd.read_csv("Course_Desc.csv", header=0)
+courses_data = get_all_courses()
+
+# Filter courses to extract 
+courses_extracted = [{'courseId': course['courseId'], 'courseTitle': course['courseTitle'], 'description': course['description']} for course in courses_data]
+
+# Convert filtered data into a DataFrame
+courses_df = pd.DataFrame(courses_extracted)
 
 # Display DataFrames
 print("Courses DataFrame:")
-print(course)
+print(courses_df)
 
 # Calculate Term Frequency-Inverse Document Frequency (TF-IDF)
 tfidf_vectorizer = TfidfVectorizer()
-tfidf_matrix = tfidf_vectorizer.fit_transform(course['description'])
+tfidf_matrix = tfidf_vectorizer.fit_transform(courses_df['description'])
 
 print("TF-IDF Matrix: ", tfidf_matrix.toarray())
 print("TF-IDF Matrix shape", tfidf_matrix.shape)
@@ -49,12 +55,12 @@ similarity_matrix = cosine_similarity(tfidf_matrix)
 # against the number of clusters abd looking for the elbow point where the rate of decrease sharply changes
 
 # Assign num of clusters
-kmeans = KMeans(n_clusters=2)
+kmeans = KMeans(n_clusters=10)
 kmeans.fit(tfidf_matrix)
 print("k labels", kmeans.labels_)
 
 # Assign cluster labels to courses
-course['cluster'] = kmeans.labels_
+courses_df['cluster'] = kmeans.labels_
 
 # Reduce dimensions
 pca = PCA(n_components=2)
@@ -91,13 +97,13 @@ def recommend_courses_by_description(query_courseTitle, top_n=5):
     sorted_indices = np.argsort(similarities)[0][::-1][:top_n]
 
     # Return recommended courses
-    return pd.concat([course.iloc[sorted_indices][['courseID']],
-                      course.iloc[sorted_indices][['courseTitle']]], axis=1).reset_index(drop=True)
+    return pd.concat([courses_df.iloc[sorted_indices][['courseId']],
+                      courses_df.iloc[sorted_indices][['courseTitle']]], axis=1).reset_index(drop=True)
 
 
 def print_term_idf(title):
     # Get the index of the course in the DataFrame
-    course_index = course[course['courseTitle'] == title].index[0]
+    course_index = courses_df[courses_df['courseTitle'] == title].index[0]
 
     # Get the TF-IDF matrix for the specific course
     course_tfidf_vector = tfidf_matrix[course_index]
@@ -118,14 +124,14 @@ def print_term_idf(title):
 # Function to recommend courses based on clusters
 def recommend_courses_by_cluster(courseTitle, top_n=5):
     # Find the cluster label of the given course
-    course_cluster = course.loc[course['courseTitle'] == courseTitle, 'cluster'].values[0]
+    course_cluster = courses_df.loc[courses_df['courseTitle'] == courseTitle, 'cluster'].values[0]
 
     # Filter courses from the same cluster, excluding the queried course
-    similar_courses = course[course['cluster'] == course_cluster]
+    similar_courses = courses_df[courses_df['cluster'] == course_cluster]
     similar_courses = similar_courses[similar_courses['courseTitle'] != courseTitle]
 
     # Return top N similar courses
-    return similar_courses[['courseID', 'courseTitle']].head(top_n)
+    return similar_courses[['courseId', 'courseTitle']].head(top_n)
 
 
 # Test the function
