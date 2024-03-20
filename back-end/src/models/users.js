@@ -49,6 +49,11 @@ module.exports = function(sequelize, DataTypes) {
         model: 'role',
         key: 'roleID'
       }
+    },
+    userPoints: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      defaultValue: 0,
     }
   }, {
     sequelize,

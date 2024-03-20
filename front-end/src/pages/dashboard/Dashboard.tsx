@@ -58,6 +58,7 @@ import Store from "./rewards/Store";
 import Admin from "./Admin/Admin";
 
 import Messages from "./messages/Messages";
+import ForumPage from "./Forum/ForumPage";
 
 type DashboardProps = {
   webSocket?: Socket;
@@ -79,6 +80,7 @@ export enum Page {
   LearningPath,
   UserDashboard,
   StorePage,
+  Forum,
   Admin,
 }
 
@@ -251,6 +253,7 @@ const Dashboard = (props: DashboardProps) => {
 
           setEnrolledCourses(courses);
           setIsFetchingEnrolledCourses(false);
+
         })
         .catch((error) => {
           setIsFetchingEnrolledCourses(false);
@@ -745,8 +748,10 @@ const Dashboard = (props: DashboardProps) => {
                     );
                     return;
                   }
-                  // setCurrentPage(Page.UserDashboard);
-                  // setSelectedCoursePage("");
+
+                  setCurrentPage(Page.Forum);
+                  setSelectedCoursePage("");
+
                 }}
               >
                 <ListItemIcon>
@@ -755,6 +760,7 @@ const Dashboard = (props: DashboardProps) => {
                 <p className="font-jakarta-sans text-white text-md">Forum</p>
               </ListItemButton>
             </ListItem>
+
 
             {/* Rewards */}
             <ListItem disablePadding>
@@ -965,6 +971,7 @@ const Dashboard = (props: DashboardProps) => {
 
         {currentPage === Page.UserDashboard && <UserDashboardPage />}
 
+
         {currentPage === Page.StorePage && <Store />}
 
         {currentPage === Page.CoursePage && selectedCoursePage !== "" && (
@@ -979,6 +986,30 @@ const Dashboard = (props: DashboardProps) => {
             onSubmitNewQuestion={onSubmitNewQuestion}
             isTeacher={false}
             isTutor={undefined}
+
+        {/* THIS IS RELATED TO FORUM */}
+        {currentPage === Page.Forum && (
+          <ForumPage
+            isTeacher={false}
+            isTutor={undefined}
+            thisUser={thisUser}
+            enrolledCourses={enrolledCourses}
+          />
+        )}
+
+        {currentPage === Page.CoursePage && selectedCoursePage !== "" && (
+          <CoursePage
+            isTeacher={false}
+            isTutor={undefined}
+            course={cachedCourseMap[selectedCoursePage]}
+            thisUser={thisUser}
+            webSocket={props.webSocket}
+            peerConnection={props.peerConnection}
+            onWithdraw={onWithdraw}
+            onSubmitNewQuestion={onSubmitNewQuestion}
+            hideSideNav={hideSideNav}
+            inLiveSessionCallback={inLiveSessionCallback}
+
           />
         )}
       </div>
