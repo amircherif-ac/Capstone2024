@@ -11,6 +11,7 @@ const CourseCode = db.course_codes;
 const User = db.users;
 const Tutor = db.tutor;
 const Teacher = db.teacher;
+const Tags = db.tags;
 
 // Create direct message
 exports.createPost = async (req, res) => {
@@ -19,12 +20,14 @@ exports.createPost = async (req, res) => {
     const postTitle = req.body.postTitle;
     const postText = req.body.postText;
     const postImagePath = req.body.postImagePath;
+    const tagID = req.body.tagID;
     Post.create({
         userID: userId,
         courseID: courseId,
         post_title: postTitle,
         post_text: postText,
-        post_image_path: postImagePath
+        post_image_path: postImagePath,
+        tagID: tagID
     }).then(result => {
         io.getIO().emit('posts', { action: 'create', post: result });
         res.status(StatusCode.SuccessCreated).send(result);
@@ -133,6 +136,24 @@ exports.getPostByCourse = async (req, res) => {
             res.status(StatusCode.ServerErrorInternal).send({ message: err.message });
         })
     }
+}
+
+// get posts by tag id
+exports.getPostByTagID = async (req, res) => {
+    const tagID = req.params.tagID;
+    Post.findAll({
+        where: { tagID: tagID },
+        include: [
+            { model: Tags, as: 'tags', attributes: ['tagName'] }
+        ],
+        order: [
+            ['post_date', 'DESC']
+        ]
+    }).then(result => {
+        res.status(StatusCode.SuccessOK).send(result)
+    }).catch(err => {
+        res.status(StatusCode.ServerErrorInternal).send({ message: err.message });
+    })
 }
 
 // get specific post by id

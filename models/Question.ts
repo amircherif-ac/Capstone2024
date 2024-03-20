@@ -16,6 +16,7 @@ export type Post = {
     post_text: string,
     post_date: number,
     post_image_path: string,
+    tags?: string[],
 }
 
 export type Reply = {
@@ -34,9 +35,31 @@ export type PostRequest = {
     postTitle: string,
     postText: string,
     postImagePath: string,
+    tagID?: number,
 }
 
 export type PatchRequest = {
     postId: number,
     isVerified: boolean,
+}
+
+export type Tags = {
+    tagID: number,
+    tagName: string,
+}
+
+export type Post_Tags = {
+    postID: number,
+    tagID: number, 
+}
+
+export type Post_Rating = {
+    postID: number,
+    rating: number,
+}
+
+export type Post_User_Rating = {
+    postID: number,
+    userID: number,
+    rating: number,
 }
