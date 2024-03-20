@@ -23,7 +23,7 @@ print("User enrolled courseID: ", enrolled_courses)
 
 # read courses and user tags
 # courses_data = pd.read_csv("Course_Desc.csv", header=0)
-# courses_data = get_all_courses()
+courses_data = get_all_courses()
 
 # Filter all courses to extract 
 courses_extracted = [{'courseId': course['courseId'], 'courseTitle': course['courseTitle'], 'description': course['description']} for course in courses_data]
@@ -33,6 +33,7 @@ courses_df = pd.DataFrame(courses_extracted)
 # print("courses_df ", courses_df)
 
 # Filter course based on enrolled course of userId
+# For testing not used
 enrolled_courses_df = courses_df[courses_df['courseId'].isin(enrolled_courses)]
 print("enrolled_courses_df: ", enrolled_courses_df)
 
