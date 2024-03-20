@@ -1,7 +1,7 @@
 import React from "react";
 import { formatCurrency } from "../utilities/formatCurrency";
 import { useShoppingCart } from "../context/ShoppingCartContext";
-import { Card, Button, Typography, Grid, Dialog, Box } from "@mui/material";
+import { Card, Button, Typography, Grid, Dialog, Box, Container } from "@mui/material";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Modal from "@mui/material/Modal";
@@ -43,8 +43,10 @@ export function StoreItem({ id, name, price, imgUrl }: StoreItemProps) {
   // const quantity = getItemQuantity(id);
 
   return (
+    
+    <Container className="d-flex justify-content-center" style={{ overflowY: "auto" }}>
     <Grid>
-      <Card>
+      <Card sx={{ maxWidth: 345 }}>
         <CardMedia
           src={imgUrl}
           height="200px"
@@ -91,16 +93,6 @@ export function StoreItem({ id, name, price, imgUrl }: StoreItemProps) {
             </div>
           </Typography>
           <div className="mt-auto">
-            {/* {quantity === 0 ? (
-            <div className="card">
-              <Button
-                className="w-100"
-                onClick={() => increaseCartQuantity(id)}
-              >
-                Purchase
-              </Button>
-            </div>
-          ) : ( */}
             <div
               className="d-flex align-items-center flex-column"
               style={{ gap: ".5rem" }}
@@ -122,6 +114,7 @@ export function StoreItem({ id, name, price, imgUrl }: StoreItemProps) {
         </CardContent>
       </Card>
     </Grid>
+    </Container>
   );
 }
 
