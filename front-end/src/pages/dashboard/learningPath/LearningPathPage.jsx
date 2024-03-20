@@ -1,7 +1,32 @@
 import React, { useEffect, useState } from 'react';
 import { Container, Typography } from '@mui/material';
 
+const API_URL = 'http://localhost:5007';
+
 const LearningPathPage = (props) => {
+
+    const [recommendation, setRecommendation] = useState([]);
+
+    useEffect(() => {
+        async function fetchData() {
+            try {
+            //================================================================================
+            // Adjust the URL to get the recommendation for the current user
+            // UserID need to be passed to the API to get the recommendation
+            // const response = await fetch(`${API_URL}/suggestion/${props.thisUser.id}`);
+            //================================================================================ 
+            const response = await fetch(`${API_URL}/suggestion`);
+            const data = await response.json();
+
+            setRecommendation(data);
+            } catch (error) {
+            console.error('Error fetching data:', error);
+            }
+        }
+        fetchData();
+    }
+    , []);
+
 
     return (
         <div className="h-full w-full p-5 flex flex-row flow-up-animation">
@@ -17,6 +42,17 @@ const LearningPathPage = (props) => {
                                 <Typography variant="h7">{course.courseId} {course.courseTitle}</Typography>
                             </li>
                         ))}
+                        {/* add suggested courses here */}
+                        <Typography variant="h5">Suggested Courses:</Typography>
+                        {recommendation && recommendation.length > 0 ? (
+                            recommendation.map(course => (
+                                <li key={course.courseID}>
+                                    <Typography variant="h7">{course.courseTitle}</Typography>
+                                </li>
+                            ))
+                        ) : (
+                        <Typography variant="h7">No course recommendations available.</Typography>
+                        )}
                     </Container>
                 </div>
             </div>
