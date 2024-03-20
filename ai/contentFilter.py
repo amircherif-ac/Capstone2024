@@ -9,12 +9,10 @@ from fetch_data import get_all_courses, get_enrolled_courses
 
 from flask import Flask
 from flask_cors import CORS
-import json
 
 app = Flask(__name__)
 port = 5007
 CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}})
-
 
 @app.get('/suggestion/<userid>')
 def suggestion(userid):
@@ -62,43 +60,6 @@ def suggestion(userid):
     # Assign cluster labels to courses
     courses_df['cluster'] = kmeans.labels_
 
-    # Function to recommend similar course
-    def recommend_courses_by_description(query_courseTitle, top_n=5):
-        # Calculate TF-IDF vector of query description
-        # Produces a weighted score for each term (want to minimize terms)
-        query_vector = tfidf_vectorizer.transform([query_courseTitle])
-
-        # Calculate cosine similarities between query and all courses
-        similarities = cosine_similarity(query_vector, tfidf_matrix)
-
-        # Sort courses by similarity score and get top N
-        sorted_indices = np.argsort(similarities)[0][::-1][:top_n]
-
-        # Return recommended courses
-        return pd.concat([courses_df.iloc[sorted_indices][['courseId']],
-                        courses_df.iloc[sorted_indices][['courseTitle']]], axis=1).reset_index(drop=True)
-
-
-    def print_term_idf(title):
-        # Get the index of the course in the DataFrame
-        course_index = courses_df[courses_df['courseTitle'] == title].index[0]
-
-        # Get the TF-IDF matrix for the specific course
-        course_tfidf_vector = tfidf_matrix[course_index]
-
-        # Get the indices of non-zero elements in the TF-IDF matrix
-        nonzero_indices = course_tfidf_vector.nonzero()[1]
-
-        # Get the feature names (terms)
-        feature_names = tfidf_vectorizer.get_feature_names_out()
-
-        print("Term IDF for course '{}'".format(title))
-        for index in nonzero_indices:
-            term = feature_names[index]
-            idf_value = tfidf_vectorizer.idf_[index]
-            print("Term: {}, IDF: {}".format(term, idf_value))
-
-
     # Function to recommend courses based on clusters
     def recommend_courses_by_cluster(courseId, top_n=5):
         # Find the cluster label of the given course
@@ -116,19 +77,14 @@ def suggestion(userid):
         for courseId in enrolled_courses:
             recommendations = recommend_courses_by_cluster(courseId)
             all_recommendations = pd.concat([all_recommendations, recommendations], ignore_index=True)  # Concatenate the recommendations
-            all_recommendations = all_recommendations.drop_duplicates().reset_index(drop=True)
+            NoDupRecommendations = all_recommendations.drop_duplicates().reset_index(drop=True)
 
-        return all_recommendations
+        return NoDupRecommendations
 
     # Get all recommendations
     all_recommendations = get_all_recommendations()
-    print(all_recommendations)
-
-    enrolled_courses = get_enrolled_courses(userid)
-    all_recommendations = get_all_recommendations()
     all_recommendations_json = all_recommendations.to_json(orient='records') 
     return all_recommendations_json
-
 
 if __name__ == '__main__':
     app.run(debug=False, port=port)
