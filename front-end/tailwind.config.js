@@ -4,11 +4,11 @@ module.exports = {
   darkMode: 'media',
   theme: {
     extend: {
-      colors: {
-        primary: '#003A70',
-        secondary: '#657786',
-        tertiary: '#add8e6'
-      },
+      // colors: {
+      //   primary: '#003A70',
+      //   secondary: '#657786',
+      //   tertiary: '#add8e6'
+      // },
       fontFamily: {
         'poppins': ['Poppins', 'sans-serif'],
         'jakarta-sans': ['Plus Jakarta Sans', 'sans-serif']

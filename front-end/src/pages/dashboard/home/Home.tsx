@@ -114,6 +114,31 @@ const Home = (props: Props) => {
                     }
                 </div>
             </div>
+            {/* <div className="flex-1 flex flex-col h-full">
+                <div className="bg-white h-full rounded-xl shadow-slate-500 shadow-md flex flex-col overflow-hidden">
+                    <div className="flex flex-row bg-secondary">
+                        <div className="bg-primary p-5">
+                            <p className="font-jakarta-sans text-lg text-white">Calendar</p>
+                        </div>
+                    </div>
+
+                    {
+                        isLoading &&
+                        <div className="flex flex-col items-center h-full w-full justify-center">
+                            <CircularProgress />
+                        </div>
+                    }
+
+                    {
+                        !isLoading &&
+                        <div className="flex flex-col items-center p-5">
+                            <Calendar className="font-jakarta-sans mb-5" />
+                            <p className="font-jakarta-sans opacity-50 text-xl">Events</p>
+                        </div>
+                    }
+                </div>
+            </div> */}
+
         </div >
     )
 }

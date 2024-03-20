@@ -6,11 +6,14 @@ import { Socket } from "socket.io-client";
 import Peer from "peerjs";
 import Dashboard from "./pages/dashboard/Dashboard";
 import { User } from "models";
+import {FontSizeProvider } from "./globalFontSlider";
+import Layout from "./layout";
 
 interface State {
     webSocket?: Socket
     peerConnection?: Peer
     thisUser?: User
+    fontSize?: number; 
 }
 
 const RootAppComponent = () => {
@@ -25,14 +28,20 @@ const RootAppComponent = () => {
     }
 
     return (
-        <Router>
-            <Routes>
-                <Route path="/Signup" element={<Signup />}></Route>
-                <Route path="/Signin" element={<Signin setUserState={setUserState.bind(this)} />}></Route>
-                <Route path="/" element={<Navigate to="/signin" />}></Route>
-                <Route path="/home" element={<Dashboard thisUser={state?.thisUser} webSocket={state?.webSocket} peerConnection={state?.peerConnection} />} />
-            </Routes>
-        </Router>
+        <FontSizeProvider>
+            <Router>
+            <Layout>
+                <Routes>
+                
+                    <Route path="/Signup" element={<Signup />}></Route>
+                    <Route path="/Signin" element={<Signin setUserState={setUserState.bind(this)} />}></Route>
+                    <Route path="/" element={<Navigate to="/signin" />}></Route>
+                    <Route path="/home" element={<Dashboard thisUser={state?.thisUser} webSocket={state?.webSocket} peerConnection={state?.peerConnection} />} />
+                    
+                </Routes>
+                </Layout>
+            </Router>
+        </FontSizeProvider>
     );
 
 }
