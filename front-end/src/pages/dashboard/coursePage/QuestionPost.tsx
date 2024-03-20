@@ -52,13 +52,24 @@ export const QuestionPost = (props: QuestionPostProps) => {
   }, []);
 
   useEffect(() => {
-    console.log("isUpvoted:", isUpvoted);
-    console.log("isDownvoted:", isDownvoted);
-    console.log("hasUserVoted:", hasUserVoted);
     // Any operations that depend on the updated state can be performed here
     // For example, updating post ratings
+
+    if (isUpvoted && !isDownvoted) {
+      updatePostRating(UPVOTE_VALUE);
+    } else if (!isUpvoted && isDownvoted) {
+      updatePostRating(DOWNVOTE_VALUE);
+    } else if (!isUpvoted && !isDownvoted) {
+      updatePostRating(NEUTRAL_VALUE);
+    } else {
+      console.log("ERROR UPDATING USER VOTE UP AND DOWN ARE TRUE");
+    }
     //updatedPostRatings();
-  }, [isUpvoted, isDownvoted, hasUserVoted]);
+  }, [isUpvoted, isDownvoted]);
+
+  useEffect(() => {
+    //console.log("hasUserVoted:", hasUserVoted);
+  }, [hasUserVoted]);
 
   // This function determines if the user: upvoted, downvoted or removed his rating to a post
   const userPostRating = () => {
@@ -127,6 +138,7 @@ export const QuestionPost = (props: QuestionPostProps) => {
     setIsVerified(verifyPost);
   };
 
+  //UNCOMMENT CREATE
   const updateUpvote = () => {
     setIsUpvoted((prevValue) => !prevValue);
     setIsDownvoted(false); // Reset isDownvoting
@@ -134,11 +146,10 @@ export const QuestionPost = (props: QuestionPostProps) => {
     if (!hasUserVoted) {
       createPostRating(UPVOTE_VALUE);
       setHasUserVoted((prevValue) => !prevValue);
-    } else {
-      //Figure out the update!
     }
   };
 
+  //UNCOMMENT CREATE
   const updateDownvote = () => {
     setIsDownvoted((prevValue) => !prevValue);
     setIsUpvoted(false); // Reset isUpvoted
@@ -146,8 +157,6 @@ export const QuestionPost = (props: QuestionPostProps) => {
     if (!hasUserVoted) {
       createPostRating(DOWNVOTE_VALUE);
       setHasUserVoted((prevValue) => !prevValue);
-    } else {
-      //Figure out the update
     }
   };
 
@@ -195,7 +204,7 @@ export const QuestionPost = (props: QuestionPostProps) => {
         }
       )
       .then((response) => {
-        console.log("This is the result of updating a post rating", response);
+        //console.log("This is the result of updating a post rating", response);
         //ADD MORE LOGIC HERE
       })
       .catch((error) => {
@@ -217,11 +226,22 @@ export const QuestionPost = (props: QuestionPostProps) => {
         }
       )
       .then((response) => {
+        const updatedRating = parseInt(response.data[0].rating);
+
         console.log(
           "This is the result of updating a post rating",
-          response.data[0].rating
+          updatedRating
         );
-        setRating(parseInt(response.data[0].rating));
+
+        // Check if updatedRating is NaN
+        if (isNaN(updatedRating)) {
+          // If it is, set rating to 0
+          setRating(0);
+        } else {
+          // Otherwise, set rating to the parsed integer value of updatedRating
+          // THIS DOES NOT UPDATE IN REAL TIME
+          setRating(updatedRating);
+        }
       })
       .catch((error) => {
         console.log("Error in testUpdatePostRating", error);
