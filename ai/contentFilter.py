@@ -5,14 +5,17 @@ from sklearn.cluster import KMeans
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.decomposition import PCA
+
 from fetch_data import get_all_courses, get_enrolled_courses
 
 # ============================== Flask ==============================
 from flask import Flask
+from flask_cors import CORS
 import json
 
 app = Flask(__name__)
 port = 5007
+CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}})
 # ============================== Flask ==============================
 
 logedInUserID = 1

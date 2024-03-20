@@ -3,7 +3,7 @@ const express = require('express')
 const router = express.Router()
 const { validateToken } = require('../middleware/AuthMiddleware')
 
-router.post('/enroll', validateToken, enrolledController.enroll);
+router.post('/enroll', enrolledController.enroll);
 
 router.delete('/withdraw', validateToken, enrolledController.withdraw);
 

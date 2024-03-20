@@ -50,7 +50,7 @@ import TurnedInIcon from "@mui/icons-material/TurnedIn";
 import CoursePage from "./coursePage/CoursePage";
 import ProfilePage from "./profile/ProfilePage";
 import CalendarPage from "./calendar/CalendarPage";
-import LearningPathPage from "./learningPath/LearningPathPage";
+import RecommendationPage from "./Recommendation/RecommendationPage";
 import UserDashboardPage from "./userDashboard/UserDashboardPage";
 
 import Admin from "./Admin/Admin";
@@ -76,7 +76,7 @@ export enum Page {
     Settings,
     SavedAnswers,
     CoursePage,
-    LearningPath,
+    Recommendation,
     UserDashboard,
     Admin
 }
@@ -817,7 +817,7 @@ const Dashboard = (props: DashboardProps) => {
                             </ListItemButton>
                         </ListItem>
 
-                        {/* Learning Path */}
+                        {/* Recommendation */}
                         <ListItem disablePadding>
                         <ListItemButton
                                 className="h-[75px]"
@@ -828,7 +828,7 @@ const Dashboard = (props: DashboardProps) => {
                                         );
                                         return;
                                     }
-                                    setCurrentPage(Page.LearningPath);
+                                    setCurrentPage(Page.Recommendation);
                                     setSelectedCoursePage("");
                                 }}
                             >
@@ -836,7 +836,7 @@ const Dashboard = (props: DashboardProps) => {
                                     <Book className="text-white" />
                                 </ListItemIcon>
                                 <p className="font-jakarta-sans text-white text-md">
-                                    Learning Path
+                                    Recommendation
                                 </p>
                             </ListItemButton>
                         </ListItem>
@@ -949,7 +949,7 @@ const Dashboard = (props: DashboardProps) => {
                     </List>
                 </div>
 
-                {currentPage === Page.Home && <Home thisUser={props.thisUser} enrolledCourses={enrolledCourses}/>}
+                {currentPage === Page.Home && <Home thisUser={props.thisUser} enrolledCourses={enrolledCourses} enrolledCourseClickCallback={onHomePageEnrolledCourseClick} />}
 
                 {
                     currentPage === Page.Calendar &&
@@ -975,8 +975,8 @@ const Dashboard = (props: DashboardProps) => {
                     />
                 )}
 
-                {currentPage === Page.LearningPath && (
-                    <LearningPathPage 
+                {currentPage === Page.Recommendation && (
+                    <RecommendationPage 
                         thisUser={thisUser}
                         enrolledCourses={enrolledCourses}
                     />
