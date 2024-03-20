@@ -253,7 +253,6 @@ const Dashboard = (props: DashboardProps) => {
 
           setEnrolledCourses(courses);
           setIsFetchingEnrolledCourses(false);
-
         })
         .catch((error) => {
           setIsFetchingEnrolledCourses(false);
@@ -751,7 +750,6 @@ const Dashboard = (props: DashboardProps) => {
 
                   setCurrentPage(Page.Forum);
                   setSelectedCoursePage("");
-
                 }}
               >
                 <ListItemIcon>
@@ -760,7 +758,6 @@ const Dashboard = (props: DashboardProps) => {
                 <p className="font-jakarta-sans text-white text-md">Forum</p>
               </ListItemButton>
             </ListItem>
-
 
             {/* Rewards */}
             <ListItem disablePadding>
@@ -808,7 +805,7 @@ const Dashboard = (props: DashboardProps) => {
               </ListItemButton>
             </ListItem>
 
-            {/* Learning Path */}
+            {/* Recommendation */}
             <ListItem disablePadding>
               <ListItemButton
                 className="h-[75px]"
@@ -819,7 +816,7 @@ const Dashboard = (props: DashboardProps) => {
                     );
                     return;
                   }
-                  setCurrentPage(Page.LearningPath);
+                  setCurrentPage(Page.Recommendation);
                   setSelectedCoursePage("");
                 }}
               >
@@ -827,7 +824,7 @@ const Dashboard = (props: DashboardProps) => {
                   <Book className="text-white" />
                 </ListItemIcon>
                 <p className="font-jakarta-sans text-white text-md">
-                  Learning Path
+                  Recommendation
                 </p>
               </ListItemButton>
             </ListItem>
@@ -924,381 +921,10 @@ const Dashboard = (props: DashboardProps) => {
                       {course.subject.courseCode.courseCode +
                         course.subject.courseNumber}
                     </p>
-
-                    <Avatar className="mr-5" />
-                    <ExpandMore className="text-white" />
-                </div>
-                <Menu
-                    anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
-                    open={profileMenuOpened}
-                    anchorEl={profileMenuAnchor}
-                    onClose={() => {
-                        setProfileMenuAnchor(null);
-                    }}
-                >
-                    <MenuItem
-                        className="min-w-[300px]  flex flex-row justify-between"
-                        onClick={() => {
-                            setProfileMenuAnchor(null);
-                            setCurrentPage(Page.Profile);
-                            setSelectedCoursePage("");
-                        }}
-                    >
-                        <p className="font-jakarta-sans">Profile</p>
-                        <AccountBox />
-                    </MenuItem>
-
-
-                    <MenuItem
-                        className="min-w-[300px] w-full flex flex-row justify-between"
-                        onClick={() => {
-                            setProfileMenuAnchor(null);
-                            logoutUser();
-                        }}
-                    >
-                        <p className="font-jakarta-sans">Sign out</p>
-                        <Logout />
-                    </MenuItem>
-                </Menu>
-            </div>
-            <div className="h-full flex flex-row overflow-y-auto">
-                <div
-                    className={`max-w-[250px] flex flex-col h-full overflow-y-auto bg-secondary ${showSideNav ? "slide-left-full" : "slide-right-full"
-                        }`}
-                >
-                    <List
-                        disablePadding
-                        className={`${showSideNav ? "" : "hidden"}`}
-                    >
-                        {
-                            // idk why this works but it does so just leave it and dont touch, thanks
-                            thisUser.roleID == '3' && (renderAdminControl(thisUser.roleID))
-                        }
-                        <ListItem
-                            disablePadding
-                            className={`${currentPage === Page.Home ? "bg-primary" : ""
-                                } `}
-                        >
-
-                            <ListItemButton
-                                className={`h-[75px]`}
-                                onClick={() => {
-                                    if (inLiveSession) {
-                                        setErrorMessage(
-                                            "You are currently in a live session. Please end or leave the session before changing tab."
-                                        );
-                                        return;
-                                    }
-
-                                    setCurrentPage(Page.Home);
-                                    setSelectedCoursePage("");
-                                }}
-                            >
-                                <ListItemIcon>
-                                    <HomeIcon className="text-white" />
-                                </ListItemIcon>
-                                <p className="font-jakarta-sans text-white text-md">
-                                    Home
-                                </p>
-                            </ListItemButton>
-                        </ListItem>
-                        <ListItem
-                            disablePadding
-                            className={`${currentPage === Page.Calendar
-                                ? "bg-primary"
-                                : ""
-                                } `}
-                        >
-                            <ListItemButton
-                                className="h-[75px]"
-                                onClick={() => {
-                                    if (inLiveSession) {
-                                        setErrorMessage(
-                                            "You are currently in a live session. Please end or leave the session before changing tab."
-                                        );
-                                        return;
-                                    }
-
-                                    setCurrentPage(Page.Calendar);
-                                    setSelectedCoursePage("");
-                                }}
-                            >
-                                <ListItemIcon>
-                                    <CalendarMonth className="text-white" />
-                                </ListItemIcon>
-                                <p className="font-jakarta-sans text-white text-md">
-                                    Calendar
-                                </p>
-                            </ListItemButton>
-                        </ListItem>
-                        <ListItem // Navigation: Message
-                            disablePadding
-                            className={`${currentPage === Page.Messages // Change this
-                                ? "bg-primary"
-                                : ""
-                                } `}
-                        >
-                            <ListItemButton
-                                className="h-[75px]"
-                                onClick={() => {
-                                    if (inLiveSession) {
-                                        setErrorMessage(
-                                            "You are currently in a live session. Please end or leave the session before changing tab."
-                                        );
-                                        return;
-                                    }
-
-                                    setCurrentPage(Page.Messages);
-                                    setSelectedCoursePage("");
-                                }}
-                            >
-                                <ListItemIcon>
-                                    <MessageIcon className="text-white" />
-                                </ListItemIcon>
-                                <p className="font-jakarta-sans text-white text-md">
-                                    Messages
-                                </p>
-                            </ListItemButton>
-                        </ListItem>
-
-                        {/*Forum*/}
-                        <ListItem disablePadding>
-                        <ListItemButton
-                                className="h-[75px]"
-                                onClick={() => {
-                                    if (inLiveSession) {
-                                        setErrorMessage(
-                                            "You are currently in a live session. Please end or leave the session before enrolling in a new course."
-                                        );
-                                        return;
-                                    }
-                                    // setCurrentPage(Page.UserDashboard);
-                                    // setSelectedCoursePage("");
-                                }}
-                            >
-                                <ListItemIcon>
-                                    <Forum className="text-white" />
-                                </ListItemIcon>
-                                <p className="font-jakarta-sans text-white text-md">
-                                    Forum
-                                </p>
-                            </ListItemButton>
-                        </ListItem>
-
-                        {/* user Dashboard */}
-                        <ListItem disablePadding>
-                        <ListItemButton
-                                className="h-[75px]"
-                                onClick={() => {
-                                    if (inLiveSession) {
-                                        setErrorMessage(
-                                            "You are currently in a live session. Please end or leave the session before enrolling in a new course."
-                                        );
-                                        return;
-                                    }
-                                    setCurrentPage(Page.UserDashboard);
-                                    setSelectedCoursePage("");
-                                }}
-                            >
-                                <ListItemIcon>
-                                    <Speed className="text-white" />
-                                </ListItemIcon>
-                                <p className="font-jakarta-sans text-white text-md">
-                                    Performance
-                                </p>
-                            </ListItemButton>
-                        </ListItem>
-
-                        {/* Recommendation */}
-                        <ListItem disablePadding>
-                        <ListItemButton
-                                className="h-[75px]"
-                                onClick={() => {
-                                    if (inLiveSession) {
-                                        setErrorMessage(
-                                            "You are currently in a live session. Please end or leave the session before enrolling in a new course."
-                                        );
-                                        return;
-                                    }
-                                    setCurrentPage(Page.Recommendation);
-                                    setSelectedCoursePage("");
-                                }}
-                            >
-                                <ListItemIcon>
-                                    <Book className="text-white" />
-                                </ListItemIcon>
-                                <p className="font-jakarta-sans text-white text-md">
-                                    Recommendation
-                                </p>
-                            </ListItemButton>
-                        </ListItem>
-                        <ListItem disablePadding>
-                            <ListItemButton
-                                className="h-[75px]"
-                                onClick={() => {
-                                    if (inLiveSession) {
-                                        setErrorMessage(
-                                            "You are currently in a live session. Please end or leave the session before enrolling in a new course."
-                                        );
-                                        return;
-                                    }
-
-                                    setEnrollCourseDialogOpen(true);
-                                }}
-                            >
-                                <ListItemIcon>
-                                    <Add className="text-white" />
-                                </ListItemIcon>
-                                <p className="font-jakarta-sans text-white text-md">
-                                    Enroll in a Course
-                                </p>
-                            </ListItemButton>
-                        </ListItem>
-                        <ListItem className="z-10 h-[75px]">
-                            <ListItemIcon>
-                                <AutoStories className="text-white" />
-                            </ListItemIcon>
-                            <p className="font-jakarta-sans text-white text-md">
-                                Your Courses
-                            </p>
-                            <ExpandMore className="text-white ml-5" />
-                        </ListItem>
-
-
-
-
-                        {isFetchingEnrolledCourses && (
-                            <div className="flex flex-col items-center justify-center h-[100px]">
-                                <CircularProgress className="text-white text-sm" />
-                            </div>
-                        )}
-                        {enrolledCourses.length === 0 &&
-                            !isFetchingEnrolledCourses && (
-                                <ListItem>
-                                    <div className="flow-up-animation">
-                                        <p className="text-white opacity-50 font-jakarta-sans">
-                                            You are not enrolled in any course.
-                                        </p>
-                                    </div>
-                                </ListItem>
-                            )}
-                        {enrolledCourses.length > 0 &&
-                            !isFetchingEnrolledCourses &&
-                            enrolledCourses.map((course, idx) => (
-                                <ListItem disablePadding key={idx}>
-                                    <ListItemButton
-                                        className={`h-[75px] flow-up-animation ${selectedCoursePage ===
-                                            course.subject.courseCode
-                                                .courseCode +
-                                            course.subject.courseNumber
-                                            ? "bg-primary"
-                                            : ""
-                                            }`}
-                                        onClick={() => {
-                                            // No need to re-render if the user selects the page he's already on
-                                            if (
-                                                selectedCoursePage ===
-                                                course.subject.courseCode
-                                                    .courseCode +
-                                                course.subject.courseNumber
-                                            ) {
-                                                return;
-                                            }
-
-                                            if (inLiveSession) {
-                                                setErrorMessage(
-                                                    "You are currently in a live session. Please end or leave the session before changing tab."
-                                                );
-                                                return;
-                                            }
-
-                                            // Hacky way to force the child component to re-render
-                                            setSelectedCoursePage("");
-                                            setTimeout(() => {
-                                                setSelectedCoursePage(
-                                                    course.subject.courseCode
-                                                        .courseCode +
-                                                    course.subject
-                                                        .courseNumber
-                                                );
-                                            }, 50);
-                                            setCurrentPage(Page.CoursePage);
-                                        }}
-                                    >
-                                        <ListItemIcon>
-                                            <TurnedInIcon className="text-white" />
-                                        </ListItemIcon>
-                                        <p className="font-jakarta-sans text-white text-md">
-                                            {course.subject.courseCode
-                                                .courseCode +
-                                                course.subject.courseNumber}
-                                        </p>
-                                    </ListItemButton>
-                                </ListItem>
-
-
-                            ))}
-                    </List>
-                </div>
-
-                {currentPage === Page.Home && <Home thisUser={props.thisUser} enrolledCourses={enrolledCourses} enrolledCourseClickCallback={onHomePageEnrolledCourseClick} />}
-
-                {
-                    currentPage === Page.Calendar &&
-                    <CalendarPage
-                        userEnrolledCourses={enrolledCourses}
-                        thisUser={props.thisUser}
-                        courses={cachedCourses} />
-                }
-
-                {currentPage === Page.Admin && <Admin setSnackBarMessage={(message: string) => {
-                    setSnackBarMessage(message)
-                }} thisUser={thisUser} />}
-
-                {currentPage === Page.Messages && <Messages thisUser={thisUser} />}
-
-                {currentPage === Page.Profile && (
-                    <ProfilePage
-                        showSnackBarMessage={showSnackBarMessage}
-                        onSubmitProfileChanges={onSubmitProfileChanges}
-                        onWithdraw={onWithdraw}
-                        thisUser={thisUser}
-                        enrolledCourses={enrolledCourses}
-                    />
-                )}
-
-                {currentPage === Page.Recommendation && (
-                    <RecommendationPage 
-                        thisUser={thisUser}
-                        enrolledCourses={enrolledCourses}
-                    />
-                )}
-
-                {currentPage === Page.UserDashboard && (
-                    <UserDashboardPage 
-                        thisUser={thisUser}
-                    />
-                )}
-
-                {currentPage === Page.CoursePage &&
-                    selectedCoursePage !== "" && (
-                        <CoursePage
-                            webSocket={props.webSocket}
-                            inLiveSessionCallback={inLiveSessionCallback}
-                            peerConnection={props.peerConnection}
-                            hideSideNav={hideSideNav}
-                            course={cachedCourseMap[selectedCoursePage]}
-                            thisUser={thisUser}
-                            onWithdraw={onWithdraw}
-                            onSubmitNewQuestion={onSubmitNewQuestion} isTeacher={false} isTutor={undefined} />
-                    )}
-            </div>
-
                   </ListItemButton>
                 </ListItem>
               ))}
           </List>
-
         </div>
 
         {currentPage === Page.Home && (
@@ -1338,10 +964,9 @@ const Dashboard = (props: DashboardProps) => {
           />
         )}
 
-        {currentPage === Page.LearningPath && <LearningPathPage />}
+        {currentPage === Page.Recommendation && <RecommendationPage />}
 
         {currentPage === Page.UserDashboard && <UserDashboardPage />}
-
 
         {currentPage === Page.StorePage && <Store />}
 
@@ -1359,7 +984,6 @@ const Dashboard = (props: DashboardProps) => {
             isTutor={undefined}
           />
         )}
-        
         {/* THIS IS RELATED TO FORUM */}
         {currentPage === Page.Forum && (
           <ForumPage
@@ -1382,7 +1006,6 @@ const Dashboard = (props: DashboardProps) => {
             onSubmitNewQuestion={onSubmitNewQuestion}
             hideSideNav={hideSideNav}
             inLiveSessionCallback={inLiveSessionCallback}
-
           />
         )}
       </div>
