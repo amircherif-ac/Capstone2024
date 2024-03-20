@@ -25,8 +25,8 @@ def get_all_courses():
         print("Failed to fetch all courses.")
         return []
 
-print("=================================   Enrolled Courses    =================================")
-print(get_enrolled_courses(1))
+# print("=================================   Enrolled Courses    =================================")
+# print(get_enrolled_courses(1))
 
 # print("=================================   All Courses    =================================")
 # print(get_all_courses())

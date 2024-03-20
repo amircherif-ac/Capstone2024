@@ -14,9 +14,9 @@ const LearningPathPage = (props) => {
             //================================================================================
             // Adjust the URL to get the recommendation for the current user
             // UserID need to be passed to the API to get the recommendation
-            // const response = await fetch(`${API_URL}/suggestion/${props.thisUser.id}`);
+            const response = await fetch(`${API_URL}/suggestion/${props.thisUser.id}`);
             //================================================================================ 
-            const response = await fetch(`${AI_API_URL}/suggestion`);
+            // const response = await fetch(`${AI_API_URL}/suggestion`);
             const data = await response.json();
 
             setRecommendation(data);
