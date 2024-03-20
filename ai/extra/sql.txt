@@ -1,0 +1,16 @@
+# coen 313
+insert into enrolled (userID, courseID, isCurrentlyEnrolled) values(1, 391, 1);
+# coen 316
+insert into enrolled (userID, courseID, isCurrentlyEnrolled) values(1, 393, 1);
+# coen 317
+insert into enrolled (userID, courseID, isCurrentlyEnrolled) values(1, 394, 1);
+# coen 390
+insert into enrolled (userID, courseID, isCurrentlyEnrolled) values(1, 397, 0);
+# coen 212
+insert into enrolled (userID, courseID, isCurrentlyEnrolled) values(1, 507, 1);
+# coen 311
+insert into enrolled (userID, courseID, isCurrentlyEnrolled) values(1, 508, 0);
+# elec 273
+insert into enrolled (userID, courseID, isCurrentlyEnrolled) values(1, 422, 0);
+# elec 311
+insert into enrolled (userID, courseID, isCurrentlyEnrolled) values(1, 423, 1);
