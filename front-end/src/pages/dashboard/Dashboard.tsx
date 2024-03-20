@@ -949,7 +949,7 @@ const Dashboard = (props: DashboardProps) => {
                     </List>
                 </div>
 
-                {currentPage === Page.Home && <Home thisUser={props.thisUser} enrolledCourses={enrolledCourses}/>}
+                {currentPage === Page.Home && <Home thisUser={props.thisUser} enrolledCourses={enrolledCourses} enrolledCourseClickCallback={onHomePageEnrolledCourseClick} />}
 
                 {
                     currentPage === Page.Calendar &&
