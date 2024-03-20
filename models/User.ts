@@ -8,7 +8,8 @@ export type User = {
     email?: string,
     roleID?: string,
     role?: string,
-    username?: string
+    username?: string,
+    userPoints?: number,
 }
 
 export type GetUserResponse = {
@@ -23,6 +24,7 @@ export type GetUserResponse = {
     lastLogin: string,
     roleID: string,
     role: string,
+    userPoints: number,
 }
 
 export type DecodedUserFromToken = {
@@ -53,4 +55,11 @@ export type EnrolledUser = {
 export type Role = {
     roleId: number,
     roleName: string,
+}
+
+//  =================================
+// THIS WILL BE USED FOR THE REWARDS PROGRAM
+export type points = {
+    userID: number,
+    userPoints: number,
 }

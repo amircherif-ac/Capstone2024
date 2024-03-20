@@ -72,7 +72,8 @@ const register = async (req, res) => {
                         passwordHASH: hash,
                         registeredAT: createAtDate,
                         //lastLogin: createAtDate,
-                        roleID: roleID
+                        roleID: roleID,
+                        userPoints: 0,
                     })
                     // User successfully logged in, generate accessToken
 

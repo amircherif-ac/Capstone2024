@@ -44,6 +44,14 @@ module.exports = function(sequelize, DataTypes) {
     post_image_path: {
       type: DataTypes.TEXT,
       allowNull: true
+    },
+    tagID: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      references: {
+        model: 'tags',
+        key: 'tagID'
+      }
     }
   }, {
     sequelize,
@@ -70,6 +78,13 @@ module.exports = function(sequelize, DataTypes) {
         using: "BTREE",
         fields: [
           { name: "courseID" },
+        ]
+      },
+      {
+        name: "tagID",
+        using: "BTREE",
+        fields: [
+          { name: "tagID" },
         ]
       },
     ]
