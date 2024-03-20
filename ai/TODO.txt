@@ -1,0 +1,27 @@
+
+AI Algo need to fetch:
+------------------------------------------------------------------------
+=> P1: Recomendation Algo: 100%
+Input:
+✔ Array of All Couses: --> CourseID, Title an description.
+✔ Array User Enrolled in courses: -->
+
+Ouput:
+✔ Array Suggestion: Course ID, Title.
+
+- Table "courses" column "description" values to be replaced with the ones from this web page: (At leat COEN, ENGR, ELEC and COMP)
+https://www.concordia.ca/academics/undergraduate/calendar/current/section-71-gina-cody-school-of-engineering-and-computer-science/section-71-60-engineering-course-descriptions/computer-engineering-courses.html
+
+- Add course suggestion to the UI Home page.
+
+------------------------------------------------------------------------
+=> P2: Deep Learning of P1: 15%
+TBD: 
+Table metrcis:
+CourseID, Num Session Attended, Assessement Grade, Engagement Level.
+
+------------------------------------------------------------------------
+=> P3: Learning Path Algo: 40%
+Bonus
+------------------------------------------------------------------------
+

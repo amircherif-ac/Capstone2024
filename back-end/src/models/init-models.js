@@ -19,6 +19,8 @@ var _teacher = require("./teacher");
 var _threads = require("./threads");
 var _tutor = require("./tutor");
 var _users = require("./users");
+
+var _metrics_logs = require("./metrics_logs");
 var _tags = require("./tags");
 var _post_tags = require("./post_tags");
 var _post_rating = require("./post_rating")
@@ -47,6 +49,8 @@ function initModels(sequelize) {
   var threads = _threads(sequelize, DataTypes);
   var tutor = _tutor(sequelize, DataTypes);
   var users = _users(sequelize, DataTypes);
+  //====================================================================================
+  var metrics_logs = _metrics_logs(sequelize, DataTypes);
 
   calendar.belongsToMany(users, { as: 'userID_users_meeting_guests', through: meeting_guest, foreignKey: "eventID", otherKey: "userID" });
   users.belongsToMany(calendar, { as: 'eventID_calendars', through: meeting_guest, foreignKey: "userID", otherKey: "eventID" });
@@ -140,6 +144,9 @@ function initModels(sequelize) {
 
   tutor.belongsTo(users, { as: "user", foreignKey: "userID"});
   users.hasMany(tutor, { as: "tutors", foreignKey: "userID"});
+  //====================================================================================
+  metrics_logs.belongsTo(users, { as: "user", foreignKey: "userID"});
+  users.hasMany(metrics_logs, { as: "metrics_logs", foreignKey: "userID"});
 
   posts.belongsTo(tags, {as: "tags", foreignKey: "tagID"});
   tags.hasMany(posts, {as: "posts", foreignKey: "tagID"});
@@ -168,6 +175,8 @@ function initModels(sequelize) {
     threads,
     tutor,
     users,
+    //====================================================================================
+    metrics_logs,
   };
 }
 module.exports = initModels;

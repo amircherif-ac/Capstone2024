@@ -1,7 +1,3 @@
-// import express from "express"
-// import cors from "cors"
-// import StatusCode from "status-code-enum"
-// import * as dotenv from 'dotenv'
 require('dotenv').config({ path: __dirname + '/.env' })
 const http = require('http')
 const express = require("express");
@@ -62,6 +58,12 @@ app.use('/api/guest', guestRoutes);
 // Redirect request to tutor endpoint 
 const teacherRoutes = require('./routes/teacherRoutes');
 app.use('/api/teacher', teacherRoutes);
+
+//========================================================================================================================
+// Redirect request to metrics logs endpoint
+const metricsLogsRoutes = require('./routes/metrics_logsRoutes');
+app.use('/api/metrics_logs', metricsLogsRoutes);
+//========================================================================================================================
 
 app.get("/", (req, res) => {
     console.log("Got request from frontend!")
