@@ -986,7 +986,9 @@ const Dashboard = (props: DashboardProps) => {
             onSubmitNewQuestion={onSubmitNewQuestion}
             isTeacher={false}
             isTutor={undefined}
-
+          />
+        )}
+        
         {/* THIS IS RELATED TO FORUM */}
         {currentPage === Page.Forum && (
           <ForumPage
