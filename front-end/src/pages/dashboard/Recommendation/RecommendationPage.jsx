@@ -59,14 +59,9 @@ const LearningPathPage = (props) => {
                                 <Typography variant="h6">{course.courseTitle}</Typography>
                                 </div>
                                 <Typography variant="body1"> <br/>
-                                {/*================================================================================*/}
-                                {/* Dynamic description need to be adjusted in here*/}
-                                {/* replace text with {course.description} */}
-                                {/*================================================================================*/}
-                                Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging across all continents except Antarctica
+                                {course.description}
                                 </Typography>
-                                
-                                <button className="bg-primary p-5 text-white px-4 py-2 mt-2 rounded-md" onClick={() => enroll(course.courseID)}>Enroll</button>
+                                <button className="bg-primary p-5 text-white px-4 py-2 mt-2 rounded-md" onClick={() => enroll(course.courseId)}>Enroll</button>
                             </Card>
                         ))}
 
