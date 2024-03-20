@@ -964,9 +964,15 @@ const Dashboard = (props: DashboardProps) => {
           />
         )}
 
-        {currentPage === Page.Recommendation && <RecommendationPage />}
+        {currentPage === Page.Recommendation && <RecommendationPage 
+        thisUser={thisUser}
+        enrolledCourses={enrolledCourses}
+        />}
 
-        {currentPage === Page.UserDashboard && <UserDashboardPage />}
+        {currentPage === Page.UserDashboard && <UserDashboardPage 
+        thisUser={thisUser}
+        enrolledCourses={enrolledCourses}
+        />}
 
         {currentPage === Page.StorePage && <Store />}
 
@@ -994,20 +1000,6 @@ const Dashboard = (props: DashboardProps) => {
           />
         )}
 
-        {currentPage === Page.CoursePage && selectedCoursePage !== "" && (
-          <CoursePage
-            isTeacher={false}
-            isTutor={undefined}
-            course={cachedCourseMap[selectedCoursePage]}
-            thisUser={thisUser}
-            webSocket={props.webSocket}
-            peerConnection={props.peerConnection}
-            onWithdraw={onWithdraw}
-            onSubmitNewQuestion={onSubmitNewQuestion}
-            hideSideNav={hideSideNav}
-            inLiveSessionCallback={inLiveSessionCallback}
-          />
-        )}
       </div>
     </div>
   );
