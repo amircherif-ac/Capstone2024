@@ -101,7 +101,7 @@
 
 import { createContext, ReactNode, useContext, useState } from "react";
 import { useLocalStorage } from "../hooks/useLocalStorage";
-import ShoppingCart from "../components/ShoppingCart";
+import { ShoppingCart } from "../components/ShoppingCart";
 
 type ShoppingCartContextProps = {
   children: ReactNode;
@@ -143,11 +143,12 @@ export function ShoppingCartProvider({ children }: ShoppingCartContextProps) {
 
   const openCart = () => setIsOpen(true);
   const closeCart = () => setIsOpen(false);
-  function getItemQuantity(id: number) {
-    return cartItems.find((item) => item.id === id)?.quantity || 0;
-  }
 
-  function increaseCartQuantity(id: number) {
+  const getItemQuantity = (id: number) => {
+    return cartItems.find((item) => item.id === id)?.quantity || 0;
+  };
+
+  const increaseCartQuantity = (id: number) => {
     setCartItems((currItems) => {
       if (currItems.find((item) => item.id === id) == null) {
         return [...currItems, { id, quantity: 1 }];
@@ -161,9 +162,9 @@ export function ShoppingCartProvider({ children }: ShoppingCartContextProps) {
         });
       }
     });
-  }
+  };
 
-  function decreaseCartQuantity(id: number) {
+  const decreaseCartQuantity = (id: number) => {
     setCartItems((currItems) => {
       if (currItems.find((item) => item.id === id)?.quantity === 1) {
         return currItems.filter((item) => item.id !== id);
@@ -177,13 +178,13 @@ export function ShoppingCartProvider({ children }: ShoppingCartContextProps) {
         });
       }
     });
-  }
+  };
 
-  function removeFromCart(id: number) {
+  const removeFromCart = (id: number) => {
     setCartItems((currItems) => {
       return currItems.filter((item) => item.id !== id);
     });
-  }
+  };
 
   return (
     <ShoppingCartContext.Provider
@@ -199,7 +200,7 @@ export function ShoppingCartProvider({ children }: ShoppingCartContextProps) {
       }}
     >
       {children}
-      {/* <ShoppingCart isOpen={isOpen} /> */}
+      <ShoppingCart isOpen={isOpen} />
     </ShoppingCartContext.Provider>
   );
 }
@@ -207,4 +208,4 @@ export function ShoppingCartProvider({ children }: ShoppingCartContextProps) {
 // const ShoppingCartContext: React.FC<ShoppingCartContextProps> = () => {
 //   return <div>Have a good coding</div>;
 // };
-export default ShoppingCartContext;
+// export default ShoppingCartContext;

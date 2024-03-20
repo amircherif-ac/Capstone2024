@@ -20,9 +20,8 @@
 // }
 
 import React from "react";
-import { User } from "models/lib/types";
 import Counter from "../../../components/Counter";
-import StoreItem from "../../../components/StoreItem";
+import { StoreItem } from "../../../components/StoreItem";
 import storeItems from "../../../data/items.json";
 import {
   Avatar,
@@ -41,20 +40,18 @@ import {
   Typography,
 } from "@mui/material";
 
-type StoreProps = {
-  thisUser?: User;
-};
+type StoreProps = {};
 
 const Store: React.FC<StoreProps> = () => {
   return (
     <>
-      <Counter />
-      <h1>Rewards</h1>
-      <Grid md={2} xs={1} lg={3} className="g-3">
+      {/* <Counter /> */}
+      {/* <h1>Rewards</h1> */}
+      <Grid container spacing={0}>
         {storeItems.map((item) => (
-          <Stack key={item.id}>
+          <Grid md={4} xs={4} lg={4} className="g-3" key={item.id}>
             <StoreItem {...item} />
-          </Stack>
+          </Grid>
         ))}
       </Grid>
       {/* <h1>Rewards</h1>

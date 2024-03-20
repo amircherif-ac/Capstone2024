@@ -21,13 +21,13 @@
         "id": 4,
         "name": "Badge 4",
         "price": 200,
-        "imgUrl": "/imgs/badge4.jpg"
+        "imgUrl": "/imgs/badge4.png"
     },
     {
         "id": 5,
         "name": "Badge 5",
         "price": 200,
-        "imgUrl": "/imgs/badge5.jpg"
+        "imgUrl": "/imgs/badge5.png"
     },
     {
         "id": 6,
@@ -39,19 +39,19 @@
         "id": 7,
         "name": "Badge 7",
         "price": 200,
-        "imgUrl": "/imgs/badge7.jpg"
+        "imgUrl": "/imgs/badge7.png"
     },
     {
         "id": 8,
         "name": "Badge 8",
         "price": 200,
-        "imgUrl": "/imgs/badge8.jpg"
+        "imgUrl": "/imgs/badge8.png"
     },
     {
         "id": 9,
         "name": "Badge 9",
         "price": 200,
-        "imgUrl": "/imgs/badge9.jpg"
+        "imgUrl": "/imgs/badge9.png"
     },
     {
         "id": 10,

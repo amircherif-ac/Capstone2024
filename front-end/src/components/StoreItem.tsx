@@ -72,8 +72,10 @@
 
 import React from "react";
 import { formatCurrency } from "../utilities/formatCurrency";
-import useShoppingCart from "../context/ShoppingCartContext";
-import { Card } from "@mui/material";
+import { useShoppingCart } from "../context/ShoppingCartContext";
+import { Card, Button, Typography, Grid } from "@mui/material";
+import CardContent from "@mui/material/CardContent";
+import CardMedia from "@mui/material/CardMedia";
 
 type StoreItemProps = {
   id: number;
@@ -82,16 +84,74 @@ type StoreItemProps = {
   imgUrl: string;
 };
 
-// export function StoreItem({ id, name, price, imgUrl }: StoreItemProps) {
-//   const {
-//     getItemQuantity,
-//     increaseCartQuantity,
-//     // decreaseCartQuantity,
-//     removeFromCart,
-//   } = useShoppingCart();
-//   const quantity = getItemQuantity(id);
+export function StoreItem({ id, name, price, imgUrl }: StoreItemProps) {
+  const {
+    // getItemQuantity,
+    increaseCartQuantity,
+    // decreaseCartQuantity,
+    removeFromCart,
+  } = useShoppingCart();
 
-const StoreItem: React.FC<StoreItemProps> = () => {
-  return <div>Have a good coding</div>;
-};
-export default StoreItem;
+  const styles = {
+    media: {
+      height: "auto",
+    },
+  };
+  // const quantity = getItemQuantity(id);
+
+  return (
+    <Grid>
+      <Card>
+        <CardMedia
+          src={imgUrl}
+          height="200px"
+          component="img"
+          style={styles.media}
+        />
+        <CardContent className="d-flex flex-column">
+          <Typography className="d-flex justify-content-between align-items-baseline mb-4">
+            <span className="fs-2">{name}</span>
+            <p>
+              <span className="ms-2 text-muted">{formatCurrency(price)}</span>
+              <Button className="w-100 float-right">Purchase</Button>
+            </p>
+          </Typography>
+          <div className="mt-auto">
+            {/* {quantity === 0 ? (
+            <div className="card">
+              <Button
+                className="w-100"
+                onClick={() => increaseCartQuantity(id)}
+              >
+                Purchase
+              </Button>
+            </div>
+          ) : ( */}
+            <div
+              className="d-flex align-items-center flex-column"
+              style={{ gap: ".5rem" }}
+            >
+              <div
+                className="d-flex align-items-center justify-content-center"
+                style={{ gap: ".5rem" }}
+              >
+                {/* <Button onClick={() => decreaseCartQuantity(id)}>-</Button> */}
+                <div>
+                  {/* <span className="fs-3">{quantity}</span> in cart */}
+                </div>
+                {/* <Button onClick={() => increaseCartQuantity(id)}>+</Button> */}
+              </div>
+              {/* <Button onClick={() => removeFromCart(id)}>Remove</Button> */}
+            </div>
+            {/* )} */}
+          </div>
+        </CardContent>
+      </Card>
+    </Grid>
+  );
+}
+
+// const StoreItem: React.FC<StoreItemProps> = () => {
+//   return <div>Have a good coding</div>;
+// };
+// export default StoreItem;
