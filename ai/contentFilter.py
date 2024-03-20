@@ -135,10 +135,10 @@ def recommend_courses_by_cluster(courseId, top_n=5):
     similar_courses = similar_courses[similar_courses['courseId'] != courseId]
 
     # Return top N similar courses
-    return similar_courses[['courseId', 'courseTitle']].head(top_n)
+    return similar_courses[['courseId', 'courseTitle', 'description']].head(top_n)
 
 def get_all_recommendations():
-    all_recommendations = pd.DataFrame(columns=['courseId', 'courseTitle'])  
+    all_recommendations = pd.DataFrame(columns=['courseId', 'courseTitle', 'description'])  
     for courseId in enrolled_courses:
         recommendations = recommend_courses_by_cluster(courseId)
         all_recommendations = pd.concat([all_recommendations, recommendations], ignore_index=True)  # Concatenate the recommendations
