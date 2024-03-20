@@ -34,6 +34,7 @@ import {
   Book,
   Speed,
   Forum,
+  EmojiEvents,
 } from "@mui/icons-material";
 import {
   Course,
@@ -52,6 +53,7 @@ import ProfilePage from "./profile/ProfilePage";
 import CalendarPage from "./calendar/CalendarPage";
 import LearningPathPage from "./learningPath/LearningPathPage";
 import UserDashboardPage from "./userDashboard/UserDashboardPage";
+import Store from "./rewards/Store";
 
 import Admin from "./Admin/Admin";
 
@@ -77,6 +79,7 @@ export enum Page {
   CoursePage,
   LearningPath,
   UserDashboard,
+  StorePage,
   Forum,
   Admin,
 }
@@ -250,7 +253,7 @@ const Dashboard = (props: DashboardProps) => {
 
           setEnrolledCourses(courses);
           setIsFetchingEnrolledCourses(false);
-          console.log("list of enrolled courses DASHBOARD", courses);
+
         })
         .catch((error) => {
           setIsFetchingEnrolledCourses(false);
@@ -745,14 +748,39 @@ const Dashboard = (props: DashboardProps) => {
                     );
                     return;
                   }
+
                   setCurrentPage(Page.Forum);
                   setSelectedCoursePage("");
+
                 }}
               >
                 <ListItemIcon>
                   <Forum className="text-white" />
                 </ListItemIcon>
                 <p className="font-jakarta-sans text-white text-md">Forum</p>
+              </ListItemButton>
+            </ListItem>
+
+
+            {/* Rewards */}
+            <ListItem disablePadding>
+              <ListItemButton
+                className="h-[75px]"
+                onClick={() => {
+                  if (inLiveSession) {
+                    setErrorMessage(
+                      "You are currently in a live session. Please end or leave the session before enrolling in a new course."
+                    );
+                    return;
+                  }
+                  setCurrentPage(Page.StorePage);
+                  setSelectedCoursePage("");
+                }}
+              >
+                <ListItemIcon>
+                  <EmojiEvents className="text-white" />
+                </ListItemIcon>
+                <p className="font-jakarta-sans text-white text-md">Rewards</p>
               </ListItemButton>
             </ListItem>
 
@@ -943,6 +971,22 @@ const Dashboard = (props: DashboardProps) => {
 
         {currentPage === Page.UserDashboard && <UserDashboardPage />}
 
+
+        {currentPage === Page.StorePage && <Store />}
+
+        {currentPage === Page.CoursePage && selectedCoursePage !== "" && (
+          <CoursePage
+            webSocket={props.webSocket}
+            inLiveSessionCallback={inLiveSessionCallback}
+            peerConnection={props.peerConnection}
+            hideSideNav={hideSideNav}
+            course={cachedCourseMap[selectedCoursePage]}
+            thisUser={thisUser}
+            onWithdraw={onWithdraw}
+            onSubmitNewQuestion={onSubmitNewQuestion}
+            isTeacher={false}
+            isTutor={undefined}
+
         {/* THIS IS RELATED TO FORUM */}
         {currentPage === Page.Forum && (
           <ForumPage
@@ -965,6 +1009,7 @@ const Dashboard = (props: DashboardProps) => {
             onSubmitNewQuestion={onSubmitNewQuestion}
             hideSideNav={hideSideNav}
             inLiveSessionCallback={inLiveSessionCallback}
+
           />
         )}
       </div>
