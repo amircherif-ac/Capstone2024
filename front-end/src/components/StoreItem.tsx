@@ -152,10 +152,16 @@ export function StoreItem({ id, name, price, imgUrl }: StoreItemProps) {
                   >
                     Do you want to confirm purchase?
                   </Typography>
-                  <Button className="w-100 font-jakarta-sans hover:bg-blue-500 duration-300">
+                  <Button
+                    onClick={handleClose}
+                    className="w-100 font-jakarta-sans"
+                  >
                     Yes
                   </Button>
-                  <Button className="w-100 font-jakarta-sans hover:bg-blue-500 duration-300">
+                  <Button
+                    onClick={handleClose}
+                    className="w-100 font-jakarta-sans"
+                  >
                     No
                   </Button>
                 </Box>
