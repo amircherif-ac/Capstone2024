@@ -5,5 +5,8 @@
     "react-chat-engine-advanced": "^0.1.28",
     "react-speech-recognition": "^3.10.0",
     "rm": "^0.1.8"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0"
   }
 }
