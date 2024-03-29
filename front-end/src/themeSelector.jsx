@@ -5,9 +5,9 @@ const CustomSelect = () => {
 
   const options = [
     { id: 1, label: 'Option 1', colors: { color1: '#003A70', color2: '#657786', color3: '#add8e6' } },
-    { id: 2, label: 'Option 2', colors: { color1: '#04364A', color2: '#04364A', color3: '#64CCC5' } },
+    { id: 2, label: 'Option 2', colors: { color1: '#04364A', color2: '#04494ae3', color3: '#64CCC5' } },
     { id: 3, label: 'Option 3', colors: { color1: '#3C3633', color2: '#747264', color3: '#E0CCBE' } },
-    { id: 3, label: 'Option 4', colors: { color1: '#000000', color2: '#ffffff', color3: '#ffffff' } },
+    { id: 3, label: 'Option 4', colors: { color1: '#000000', color2: '#c9c9c9', color3: '#5c5c5c' } },
     { id: 1, label: 'Option 5', colors: { color1: '#007F73', color2: '#4CCD99', color3: '#75A265' } },
   ];
 
