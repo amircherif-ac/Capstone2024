@@ -59,6 +59,8 @@ import Admin from "./Admin/Admin";
 
 import Messages from "./messages/Messages";
 import ForumPage from "./Forum/ForumPage";
+import FontSlider from "../../globalFontSlider";
+import CustomSelect from '../../themeSelector';
 
 type DashboardProps = {
   webSocket?: Socket;
@@ -602,6 +604,13 @@ const Dashboard = (props: DashboardProps) => {
             Study Hero
           </p>
         </div>
+        <div className="flex flex-row items-center font-jakarta-sans text-white text-2xl">
+           <CustomSelect />
+        </div>
+
+        <div className="flex flex-row items-center font-jakarta-sans text-white text-2xl">
+           <FontSlider />
+        </div>        
         <div
           className="flex flex-row items-center transition ease-in-out hover:bg-blue-600 pl-5 pr-5 min-w-[300px] justify-end"
           onClick={(e) => {

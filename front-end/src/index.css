@@ -4,14 +4,33 @@
 
 html {
     font-family: Plus Jarkata Sans, sans-serif;
+    font-size: var(--font-size);
 }
 
 :root {
     --animation-delay: ''
+    --font-size: 16px;
+    --primary-color: #003A70;
+    --secondary-color: #657786;
+    --tertiary-color: #add8e6;
+}
+
+.bg-tertiary {
+    background-color: var(--tertiary-color)!important;
+}
+.bg-secondary {
+    background-color: var(--secondary-color)!important;
+}
+.bg-primary {
+    background-color: var(--primary-color)!important;
 }
 
 body {
     margin: 0px !important;
+}
+
+#font-slider {
+    width: 100%;
 }
 
 .flow-up-animation {
